@@ -1,0 +1,121 @@
+import express, { NextFunction, Request, Response } from "express";
+import { config } from "dotenv";
+import cors from "cors";
+import path from "path";
+
+import connectToDB from "./config/db.js";
+import authRouter from "./routes/authRoutes.js";
+
+import cookieParser from "cookie-parser";
+import { fileURLToPath } from "url";
+
+import organisationRouter from "./routes/organisationRoute.js";
+import formRouter from "./routes/formRoutes.js";
+
+import { protect } from "./middlewares/authMiddleware.js";
+import ticketRouter from "./routes/ticketRoutes.js";
+import commentRouter from "./routes/commentRoutes.js";
+import userRouter from "./routes/userRoute.js";
+import statRouter from "./routes/statRoutes.js";
+import attachementRouter from "./routes/attachement.js";
+import infoRouter from "./routes/infoRoutes.js";
+import motifRouter from "./routes/motifRoutes.js";
+import { errorHandler } from "./middlewares/errorHandler.js";
+import { createServer } from "http";
+import { Server } from "socket.io";
+import usefulLinksRouter from "./routes/usefulLinksRoutes.js";
+import { checkBiAPI } from "./middlewares/biMiddleware.js";
+import biRouter from "./routes/biRoutes.js";
+import { seedtickets } from "./seed/seedDb.js";
+
+
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const app = express();
+config();
+export const CLIENT_URL=process.env.CLIENT_URL;
+const server = createServer(app); // http
+export const io = new Server(server, {
+  cors: { origin: '*', methods: ['GET', 'POST'] },
+});
+
+app.use(express.json());
+app.use(cookieParser());
+// app.use(cors());
+ app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
+
+connectToDB();
+
+
+
+//await (tickets.forEach(async(t)=>await ticketModel.create(t)))
+
+ app.set("etag", false);
+app.use("/api/auth", authRouter);
+app.use("/api/organisations",protect, organisationRouter);
+app.use("/api/forms",protect, formRouter);
+app.use("/api/tickets",protect, ticketRouter);
+app.use("/api/comments",protect, commentRouter);
+app.use("/api/users",protect, userRouter);
+app.use("/api/stat",protect,statRouter);
+app.use("/api/attachement",protect,attachementRouter);
+app.use("/api/info",protect,infoRouter);
+app.use("/api/motifs",protect,motifRouter)
+app.use("/api/links",protect,usefulLinksRouter)
+app.use("/api/bireporting",checkBiAPI,biRouter)
+app.use("/api/seed",(req:Request,res:Response,next:NextFunction)=>{
+  if(process.env.MODE!=="test")return res.status(404).json({message:"page not found"});
+  next();
+},seedtickets)
+app.get("/api/test",(req:Request,res:Response)=>{
+  console.log("test")
+  return res.status(200).json({message:"this just for cron job",client:process.env.CLIENT_URL,requiestIp:req.ip});
+})
+
+app.use(
+  "/uploads",
+  express.static(path.join(path.dirname(__dirname), "uploads"))
+);
+
+// Sanitize PORT: remove any non-digit characters and parse to integer
+const rawPort = String(process.env.PORT ?? "").trim();
+const numericPort = parseInt(rawPort.replace(/[^0-9]/g, ""), 10);
+const PORT =
+  Number.isFinite(numericPort) && numericPort > 0 ? numericPort : 3500;
+
+  app.use(errorHandler);
+
+
+  io.on('connection', (socket) => {
+  console.log('a user connected');
+  
+  socket.on('disconnect', () => console.log('user disconnected'));
+  socket.on("register",async (organisationId:string)=> {
+    await socket.join(organisationId);
+    console.log("user joined "+organisationId)
+   
+  });
+  socket.on('logout', async (organisationId: string) => {
+    await socket.leave(organisationId);
+    console.log("User leaved "+organisationId);
+  });
+   //console.log(socket)
+});
+server.listen(PORT, (err?: Error) => {
+  if (err) console.error("Server failed to start:", err);
+  console.log(`Server running on port ${PORT}`);
+});
+
+
+
+
+
