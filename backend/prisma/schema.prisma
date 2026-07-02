@@ -1,0 +1,62 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id String @id @default(uuid())
+
+  firstName String
+  lastName  String
+
+  email String @unique
+
+  username String @unique
+
+  passwordHash String
+
+  phone String?
+
+  avatarUrl String?
+
+  language String @default("fr")
+
+  isActive Boolean @default(true)
+
+  isLocked Boolean @default(false)
+
+  emailVerified Boolean @default(false)
+
+  lastLoginAt DateTime?
+
+  passwordChangedAt DateTime?
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+
+  deletedAt DateTime?
+
+  roleId String
+
+  branchId String?
+
+  
+
+  @@index([email])
+
+  @@index([username])
+
+  @@index([roleId])
+
+  @@index([branchId])
+
+  @@map("users")
+}
+/// We could not retrieve columns for the underlying table. Either it has none or you are missing rights to see them. Please check your privileges.
+// model test {
+// }
