@@ -21,8 +21,8 @@ const Login = () => {
   }
   return (
     <main className="w-full h-full lg:grid grid-cols-5 ">
-      <section className=" col-span-2 hidden lg:flex">
-        <img src="banner.png"  />
+      <section className=" col-span-2 hidden lg:flex max-h-screen">
+        <img className=" object-cover w-full" src="banner.png"  />
       </section>
         <section className="col-span-3 flex flex-col items-center  px-5">
             <img className=" max-h-32 max-w-32" src="icon.png" />

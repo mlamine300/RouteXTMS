@@ -13,6 +13,7 @@ import { fileURLToPath } from "url";
 
 
 import { createServer } from "http";
+import userRouter from "./src/routes/userRoute.js";
 
 
 
@@ -55,6 +56,8 @@ app.use(
   "/uploads",
   express.static(path.join(path.dirname(__dirname), "uploads"))
 );
+
+
 
 // Sanitize PORT: remove any non-digit characters and parse to integer
 const rawPort = String(process.env.PORT ?? "").trim();
