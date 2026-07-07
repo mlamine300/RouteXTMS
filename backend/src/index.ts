@@ -13,6 +13,8 @@ import { fileURLToPath } from "url";
 
 import { createServer } from "http";
 import userRouter from "./routes/userRoute.js";
+import authRouter from "./routes/authRoute.js";
+import { checkAdmin, protect } from "./middlewares/authMiddleware.js";
 
 
 
@@ -51,7 +53,8 @@ app.use(
   "/uploads",
   express.static(path.join(path.dirname(__dirname), "uploads"))
 );
-app.use("/api/user",userRouter);
+app.use("/api/user",protect,checkAdmin,userRouter);
+app.use("/api",authRouter)
 
 // Sanitize PORT: remove any non-digit characters and parse to integer
 const rawPort = String(process.env.PORT ?? "").trim();

@@ -19,6 +19,8 @@ model User {
 
   passwordHash String
 
+  refreshTokens String[]
+
   phone String?
 
   avatarUrl String?
