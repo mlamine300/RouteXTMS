@@ -77,7 +77,7 @@ Ressources
 
 # 5. Collections
 
-| Collection | Description |
+| tables | Description |
 |------------|-------------|
 | vehicles | Parc véhicules |
 | drivers | Chauffeurs |

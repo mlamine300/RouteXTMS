@@ -117,3 +117,22 @@ export const getUserById = async (req: Request, res: Response): Promise<any> => 
     res.status(500).json({ error: 'Failed to fetch User' });
   }
 };
+
+export const SeedUser=async({firstName,lastName,email,username,password,roleId}:{firstName:string,lastName:string,email:string,username:string,password:string,roleId:string})=>{
+  const foundUser=await prisma.user.findFirst({where:{OR:[{email:email},{username:username}]}});  
+  if(foundUser&&foundUser.id)throw new Error("user exist")  
+  const passwordHash = await bcrypt.hash(password, 10);
+        
+
+   const newUser = await prisma.user.create({
+     data: {
+       firstName,
+       lastName,
+       email,
+       username,
+       passwordHash,
+       roleId,
+     },
+   });
+    console.log(`useer ${username} has been created succesufly`);
+}

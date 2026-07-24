@@ -44,9 +44,8 @@ La base de données sera conçue selon les principes suivants :
 - séparation des domaines métier ;
 - faible couplage ;
 - forte cohésion ;
-- documents de taille raisonnable ;
+- ligne de table de taille raisonnable ;
 - utilisation des références (`ObjectId`) pour les relations importantes ;
-- utilisation des documents imbriqués uniquement lorsque cela apporte un gain de performance.
 
 ---
 
@@ -115,7 +114,7 @@ Toutes les collections possèdent les champs suivants :
 
 ---
 
-# 7. Collections
+# 7. Tables
 
 Cette section détaillera chaque collection.
 
@@ -194,7 +193,7 @@ Cette section détaillera chaque collection.
 
 # 8. Relations
 
-Cette section décrira les relations entre les collections.
+Cette section décrira les relations entre les tables.
 
 (À compléter)
 

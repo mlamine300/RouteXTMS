@@ -15,6 +15,7 @@ import { createServer } from "http";
 import userRouter from "./routes/userRoute.js";
 import authRouter from "./routes/authRoute.js";
 import { checkAdmin, protect } from "./middlewares/authMiddleware.js";
+import { SeedUser } from "./controllers/userController.js";
 
 
 
@@ -65,7 +66,7 @@ const PORT =
  
 
 
-
+//SeedUser({firstName:"Laoufi",lastName:"Lamine",username:"lamine",password:"lamine@gmail.com",roleId:"admin",email:"lamine@gmail.com"})
 server.listen(PORT, (err?: Error) => {
   if (err) console.error("Server failed to start:", err);
   console.log(`Server running on port ${PORT}`);

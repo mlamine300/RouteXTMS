@@ -53,8 +53,8 @@ const userModel=await prisma.user;
     res.cookie("refreshToken", refreshToken, cookieOpts);
   }
 
-  
-  return res.status(200).json(returnUser);
+  const token=signAccessToken(returnUser);
+  return res.status(200).json({token,user:{...returnUser,refreshTokens:null}});
 };
 
 export const getUserProfile = async (
