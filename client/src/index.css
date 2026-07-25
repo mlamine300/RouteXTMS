@@ -458,10 +458,15 @@
     border: 1px solid rgba(255, 255, 255, 0.05);
   }
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border outline-ring/50 text-text-primary  ;
   }
 }
-
+.container{
+  @apply min-2xl:max-w-7xl min-h-screen h-fit bg-background-base 
+}
+.page-layout{
+  @apply w-full h-full p-[3%]  flex flex-col items-start bg-background shadow-2xl min-h-[90svh] 
+}
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);

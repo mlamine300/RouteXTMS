@@ -10,11 +10,11 @@ const DashboardLayout = ({ children }: { children: any }) => {
  
 
   return (
-    <section className=" h-full min-h-svh flex flex-row ">
+    <section className=" h-full  min-h-svh flex flex-row ">
       
       <SideBar  />
 
-      <main  className=" my-24 w-full px-5   flex  h-full layout justify-center ">{children}</main>
+      <main  className=" my-24 w-full px-5   flex  h-full container justify-center ">{children}</main>
    
     </section>
   );

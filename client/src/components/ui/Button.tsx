@@ -4,14 +4,17 @@ import { twMerge } from "tailwind-merge";
 
 const Button = ({
   text,
+  icon,
   onClick,
   variant,
   className,
   ...props
 }: React.ComponentProps<"button"> & {
   text: string;
+  icon?:any
   variant: "primary" | "outline" | "shadow";
 }) => {
+  const Icon=icon;
   const primary =
     "bg-primary hover:bg-primary/50 disabled:bg-gray-cold/70 text-text-accent";
 
@@ -31,6 +34,7 @@ const Button = ({
       )}
       onClick={onClick}
     >
+{icon&&<Icon className="w-5 h-5" />}
       {text}
     </button>
   );

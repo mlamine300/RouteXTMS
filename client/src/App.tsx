@@ -5,6 +5,7 @@ import Login from './pages/auth/Login'
 import PrivateRoute from "./routes/PrivateRoute"
 import Dashboard from "./pages/dashboard/Dashboard"
 import NotFound from './components/main/NotFound'
+import DriversPage from "./pages/ressources/drivers/DriversPage"
 function App() {
   
 
@@ -15,6 +16,9 @@ function App() {
        
        <Route element={<PrivateRoute allowedRoles={["standard","supervisor", "admin"]} />}>
            <Route path="/" element={<Dashboard />} />
+       </Route>
+        <Route element={<PrivateRoute allowedRoles={[ "admin"]} />}>
+           <Route path="/drivers" element={<DriversPage />} />
        </Route>
        <Route path="*" element={<NotFound />} />
 

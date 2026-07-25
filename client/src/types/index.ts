@@ -36,3 +36,74 @@ export interface MenuItemType{
     
   
 }
+
+export type Driver = {
+  id: string ;
+  userId: string ;
+  firstName: string ;
+  lastName: string ;
+  phone: string ;
+  email: string | null
+  isEmployee: boolean ;
+  employeeId: string ;
+  licenseNumber: string ;
+  licenseCategories:LicenseCategory[];
+  licenseExpiresAt: Date ;
+  medicalCheckExpiresAt: Date ;
+  fimoExpiresAt: Date ;
+  status: DriverStatus;
+  isActive: boolean ;
+  currentLat: number | null
+  currentLng: number | null
+  lastLocationUpdate: Date | null
+  createdAt: Date | null
+  updatedAt: Date | null
+  assignedVehicleId: string | null
+  assignedVehicle:Vehicle|null
+}
+
+export type Vehicle = {
+  id: string | null
+  fleetNumber: string | null
+  plateNumber: string | null
+  vin: string | null
+  make: string | null
+  model: string | null
+  year: number | null
+  type: VehicleType | null
+  fuelType: FuelType | null
+  status: VehicleTechnicalStatus | null
+  maxPayloadKg: number | null
+  maxVolumeM3: number | null
+  euroPalletCap: number | null
+  grossWeightKg: number | null
+  curbWeightKg: number | null
+  isRefrigerated: boolean | null
+  tempMinCelsius: number | null
+  tempMaxCelsius: number | null
+  hasTailLift: boolean | null
+  hasHazardousAdr: boolean | null
+  insuranceNumber: string | null
+  insuranceExpiresAt: Date | null
+  inspectionExpiresAt: Date | null
+  tachographExpiresAt: Date | null
+  currentOdometerKm: number | null
+  telematicsDeviceId: string | null
+  fuelConsumptionAvg: number | null
+  isActive: boolean | null
+  createdAt: Date | null
+  updatedAt: Date | null
+  assignedDriverId: string | null
+  attachedTrailerId: string | null
+}
+export const DRIVER_STATUS=["AVAILABLE" , "ON_TRIP" , "ON_BREAK" , "OFF_DUTY" , "INACTIVE"] as const;
+export type DriverStatus=typeof DRIVER_STATUS[number]
+
+export const LICENSE_CATEGORY=["C" , "CE" , "C1" , "C1E" , "D"] as const;
+export type LicenseCategory = typeof LICENSE_CATEGORY[number];
+export const VEHICLE_TYPE=["TRACTOR_UNIT" , "SEMI_TRAILER" , "RIGID_TRUCK" , "VAN" , "CONTAINER_CHASSIS"] as const;
+export type VehicleType = typeof VEHICLE_TYPE[number] 
+export const FUEL_TYPE=["DIESEL" , "ELECTRIC" , "CNG_LNG" , "HYBRID" , "HYDROGEN"] as const;
+export type FuelType = typeof FUEL_TYPE[number]
+export const VEHICLE_TECHNICAL_STATUS=["OPERATIONAL" , "IN_MAINTENANCE" , "OUT_OF_SERVICE" , "RESERVED"] as const;
+type VehicleTechnicalStatus = typeof VEHICLE_TECHNICAL_STATUS[number]

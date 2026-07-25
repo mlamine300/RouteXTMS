@@ -1,7 +1,9 @@
 import { useTheme } from "next-themes";
+
 import { HiOutlineSun, HiMoon } from "react-icons/hi2";
 const Header = () => {
   const { theme, setTheme } = useTheme();
+
   const imageURlWhite=import.meta.env.VITE_HEADER_URL_WHITE||"";
     const imageURlDark=import.meta.env.VITE_HEADER_URL_DARK||"";
     const imageUrl=theme==="light"?imageURlWhite:imageURlDark;

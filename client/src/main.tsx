@@ -5,9 +5,12 @@ import App from './App.tsx'
 import { BrowserRouter } from 'react-router'
 import  { Toaster } from 'react-hot-toast';
 import AuthProvider from "./context/auth/AuthProvider.tsx"
+import { ThemeProvider } from 'next-themes'
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    
+    <ThemeProvider>
+
+  
     <BrowserRouter>
     <Toaster/>
     <AuthProvider>
@@ -16,5 +19,6 @@ createRoot(document.getElementById('root')!).render(
     <App />
         </AuthProvider>
     </BrowserRouter>
+      </ThemeProvider>
   </StrictMode>,
 )
