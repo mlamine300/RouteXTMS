@@ -73,7 +73,7 @@ export function DataTable<TData, TValue>({
             
               return (
               <TableRow
-              //onClick={()=>{showTicket(ticket)}}
+              
               className={`border border-gray-hot cursor-pointer hover:bg-gray-hot/50 h-16 `}
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}

@@ -16,6 +16,7 @@ import userRouter from "./routes/userRoute.js";
 import authRouter from "./routes/authRoute.js";
 import { checkAdmin, protect } from "./middlewares/authMiddleware.js";
 import { SeedUser } from "./controllers/userController.js";
+import driverRouter from "./routes/driverRoute.js";
 
 
 
@@ -56,6 +57,7 @@ app.use(
 );
 app.use("/api/user",protect,checkAdmin,userRouter);
 app.use("/api",authRouter)
+app.use("/api/driver"/*,protect,checkAdmin*/,driverRouter);
 
 // Sanitize PORT: remove any non-digit characters and parse to integer
 const rawPort = String(process.env.PORT ?? "").trim();
