@@ -95,6 +95,31 @@ export const getDrivers = async (req: Request, res: Response): Promise<Response>
   }
 };
 
+export const searchDrivers=async (req:Request,res:Response):Promise<Response>=>{
+  try {
+    const limit=req.body?.limit||10;
+    const skip=req.body?.skip||0;
+    const status=req.body?.status;
+    const licenseCategories=req.body?.licenseCategories;
+    const search=req.body?.search;
+    const orderBy=req.body?.orderBy||"createdAt";
+    const orderOrientation=req.body?.orderOrientation||"desc";
+
+    let filter=[];
+    if(status)filter.push({status});
+    if(licenseCategories&&licenseCategories.length>0)filter.push({licenseCategories:{hasSome:licenseCategories}});
+    if(search)filter.push({OR:[{licenseNumber:{contains:search}},{phone:{contains:search}},{firstName:{contains:search}},{lastName:{contains:search}}]})
+  console.log(JSON.stringify(filter))
+    const drivers=await prisma.driver.findMany({take:limit,skip,where:{AND:filter},orderBy:{[orderBy]:orderOrientation}});
+    return res.status(200).json({message:"success",data:drivers});
+
+    return res.status(200)
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({error,message:"Server Error, failed to get Drivers"})
+  }
+}
+
 export const getDriverById = async (req: Request, res: Response): Promise<Response> => {
   try {
     const id=req.params.id as string;

@@ -118,7 +118,7 @@ const [distanceFromCity, setdistanceFromCity] = useState(-1);
                 <label className='w-full flex text-xs italic'>Status</label>
                 <Select value={status} onValueChange={(v:string)=>setStatus((v as DriverStatus)||"")}>
                   <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Priorité" />
+                    <SelectValue placeholder="Status" />
                   </SelectTrigger>
                   <SelectContent className="bg-background-base">
                     <p className='text-sm hover:cursor-pointer p-2' onClick={() => setStatus("")}>
@@ -137,7 +137,7 @@ const [distanceFromCity, setdistanceFromCity] = useState(-1);
                 <label className='w-full flex text-xs italic'>Catégory de Permit</label>
                 <Select value={LicenseCategory} onValueChange={(value)=>setLicenseCategory((value as LicenseCategory)||"")}>
                   <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Priorité" />
+                    <SelectValue placeholder="Catégory" />
                   </SelectTrigger>
                   <SelectContent className="bg-background-base">
                     <p className='text-sm hover:cursor-pointer p-2' onClick={() => setLicenseCategory("")}>

@@ -10,6 +10,7 @@ export const API_PATHS={
         ADD_DRIVER:"api/driver",
         UPDATE_DRIVER:(id:string)=>`api/driver/${id}`,
         DELETE_DRIVER:(id:string)=>`api/driver/${id}`,
-        GET_DRIVER_BY_ID:(id:string)=>`api/driver/${id}`
+        GET_DRIVER_BY_ID:(id:string)=>`api/driver/${id}`,
+        SEARCH_DRIVERS:"api/driver/list/search"
     }
 }

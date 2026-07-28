@@ -4,12 +4,12 @@
 
 import type { ColumnDef } from "@tanstack/react-table"
 import type { CSSProperties } from "react"
-
-import {  Pen} from "lucide-react";
+import {   ArrowDown, ArrowUp, ArrowUpDown, Pen} from "lucide-react";
 import type{Driver} from "../../types/index"
-
 import { SheetTrigger } from "../ui/sheet";
 import { differenceInDays, format } from "date-fns";
+import { useSearchParams } from "react-router";
+
 
 
 
@@ -17,7 +17,7 @@ import { differenceInDays, format } from "date-fns";
 
 export const columns:({setdriverToEdit}:{setdriverToEdit:any})=> ColumnDef<Driver>[] =({setdriverToEdit})=> [
   {accessorKey:"driver",
-   header: "Chauffeur",
+   header:()=> getHeader({sortBy:"firstName",title:"Chauffeur"}),
     
     cell:({row})=>{
       const r=row.original;
@@ -38,7 +38,8 @@ export const columns:({setdriverToEdit}:{setdriverToEdit:any})=> ColumnDef<Drive
   }
   ,
     {accessorKey:"licences",
-   header: "Permis",
+      
+   header:()=> <p className="text-xs">Permis</p>,
     
     cell:({row})=>{
       const r=row.original;
@@ -61,7 +62,8 @@ export const columns:({setdriverToEdit}:{setdriverToEdit:any})=> ColumnDef<Drive
   ,
 
      {accessorKey:"status",
-   header: "Status",
+  
+   header:()=> <p className="text-xs">Status</p>,
     
     cell:({row})=>{
     const statusStyle: Record<string, CSSProperties> = {
@@ -84,7 +86,8 @@ export const columns:({setdriverToEdit}:{setdriverToEdit:any})=> ColumnDef<Drive
   }
   ,
   {accessorKey:"vehicle",
-   header: "Camion",
+    header:()=> <p className="text-xs">Camion</p>,
+  
     
     cell:({row})=>{
     const vehicle=row.original.assignedVehicle;
@@ -100,7 +103,8 @@ export const columns:({setdriverToEdit}:{setdriverToEdit:any})=> ColumnDef<Drive
   }
   ,
       {accessorKey:"licenseExpiresAt",
-   header: "Permis expire en",
+        header:()=> getHeader({sortBy:"licenseExpiresAt",title:"Permis expire en"}),
+   
     
     cell:({row})=>{
     const expireIn=differenceInDays(row.original.licenseExpiresAt,new Date())
@@ -119,7 +123,8 @@ export const columns:({setdriverToEdit}:{setdriverToEdit:any})=> ColumnDef<Drive
 
   },
        {accessorKey:"medicalCheckExpiresAt",
-   header: "Visite Méd.",
+         header:()=> getHeader({sortBy:"medicalCheckExpiresAt",title:"Visite Méd."}),
+   
     
      cell:({row})=>{
     const expireIn=differenceInDays(row.original.medicalCheckExpiresAt,new Date())
@@ -138,7 +143,8 @@ export const columns:({setdriverToEdit}:{setdriverToEdit:any})=> ColumnDef<Drive
 
   },
        {accessorKey:"fimoExpiresAt",
-   header: "Formation",
+         header:()=> getHeader({sortBy:"fimoExpiresAt",title:"Formation"}),
+  
     
      cell:({row})=>{
     const expireIn=differenceInDays(row.original.fimoExpiresAt,new Date())
@@ -159,7 +165,7 @@ export const columns:({setdriverToEdit}:{setdriverToEdit:any})=> ColumnDef<Drive
   
     
 {
-  header:"Edit",
+  header:()=> <p className="text-xs">Edit</p>,
     id: "edit",
     enableHiding: false,
     cell: ({ row }) => {
@@ -174,3 +180,30 @@ export const columns:({setdriverToEdit}:{setdriverToEdit:any})=> ColumnDef<Drive
   
   
 ]
+
+const getHeader=({sortBy,title}:{sortBy:string,title:string})=>  {
+  
+         // eslint-disable-next-line react-hooks/rules-of-hooks
+         const [searchParams, setSearchParams] = useSearchParams();
+    const params = new URLSearchParams(searchParams);
+      return (
+        <div
+        className="text-xs flex gap-1 items-center cursor-pointer hover:bg-gray-cold/20 py-px px-2 rounded hover:font-bold"
+          //onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          onClick={()=>
+          {
+          params.set("order_by",sortBy)
+          params.set("order_orientation",params.get("order_orientation")==="asc"?"desc":"asc")
+          params.set("page","1")
+          setSearchParams(params) 
+          }
+          }
+        >
+          
+            <p className={` ${params.get("order_by")===sortBy?" font-extrabold underline text-sm":"text-xs"}`}>{title}</p>
+           
+          
+          {params.get("order_by")!==sortBy?<ArrowUpDown className="ml-2 h-4 w-4" />:params.get("order_orientation")==="asc"?<ArrowDown className="ml-2 h-6 w-6" color="#1245ff" />:<ArrowUp className="ml-2 h-6 w-6" color="#1245ff"  />}
+        </div>
+      )
+    }
