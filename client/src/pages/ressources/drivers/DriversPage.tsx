@@ -1,18 +1,18 @@
 
-import {DataTable} from "../../../components/driver/data-table"
+import {DataTable} from "../../../components/ui/data-table"
 import {columns} from "../../../components/driver/columns"
 import type { Driver, DriverStatus, LicenseCategory } from "@/types";
 import { Sheet } from "@/components/ui/sheet";
 import FilterTableDiv from "@/components/driver/FilterTableDiv"
 import EditDriverSheetContent from "@/components/driver/EditDriverSheetContent"
 import { useEffect, useMemo, useState } from "react";
-import TablePagination from "@/components/driver/TablePagination"
+import TablePagination from "@/components/ui/TablePagination"
 import Button from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import Modal from "@/components/ui/Modal"
 import {searchDriversAction} from "@/actions/driverActions"
 import { useSearchParams } from "react-router";
-import SkeletonRow from "@/components/driver/SkeletonRow"
+import SkeletonRow from "@/components/ui/SkeletonRow"
 const DRIVER_PER_PAGE=10;
 const DriversPage = () => {
     const [driverToEdit, setdriverToEdit] = useState<Driver|null>(null);
@@ -54,10 +54,10 @@ useEffect(()=>{
          <Sheet>
 
         
-      <div className="w-full   min-h-40  py-4 flex flex-col items-center">
+      <div className="w-full   min-h-40   flex flex-col items-center">
              <div className="flex justify-between  w-full">
-                <h3 className="text-5xl mb-8">Gestion des chauffeurs</h3>
-                <Button text="Ajouter un Chauffeur" variant="outline" className="h-16 px-6 py-1 flex items-center gap-2" icon={Plus} onClick={()=>setShowModal(true)} />
+                <h3 className="text-3xl 2xl:text-5xl 2xl:mb-8">Gestion des chauffeurs</h3>
+                <Button text="Ajouter un Chauffeur" variant="outline" className="2xl:h-16 h-10 px-6 py-1 flex items-center gap-2" icon={Plus} onClick={()=>setShowModal(true)} />
              </div>
         <section className=" w-full h-full p-2   rounded-lg shadow-2xl">
             <FilterTableDiv/>

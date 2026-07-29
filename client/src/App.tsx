@@ -6,6 +6,7 @@ import PrivateRoute from "./routes/PrivateRoute"
 import Dashboard from "./pages/dashboard/Dashboard"
 import NotFound from './components/main/NotFound'
 import DriversPage from "./pages/ressources/drivers/DriversPage"
+import TrucksPage from "./pages/ressources/trucks/TrucksPage"
 function App() {
   
 
@@ -19,6 +20,7 @@ function App() {
        </Route>
         <Route element={<PrivateRoute allowedRoles={[ "admin"]} />}>
            <Route path="/drivers" element={<DriversPage />} />
+           <Route path="/trucks" element={<TrucksPage />} />
        </Route>
        <Route path="*" element={<NotFound />} />
 

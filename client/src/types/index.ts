@@ -72,7 +72,7 @@ export type Vehicle = {
   year: number | null
   type: VehicleType | null
   fuelType: FuelType | null
-  status: VehicleTechnicalStatus | null
+  status: VehicleTechnicalStatus 
   maxPayloadKg: number | null
   maxVolumeM3: number | null
   euroPalletCap: number | null
@@ -95,7 +95,46 @@ export type Vehicle = {
   updatedAt: Date | null
   assignedDriverId: string | null
   attachedTrailerId: string | null
+   assignedDriver:Driver |null
+   attachedTrailer:Trailer |null
 }
+export type Trailer={
+    id: string 
+  fleetNumber: string 
+  plateNumber: string 
+  vin: string 
+  make: string 
+  model: string 
+  year: number 
+  type: TrailerType 
+  status: TrailerStatus 
+  maxPayloadKg: number | null
+  maxVolumeM3: number | null
+  euroPalletCap: number | null
+  internalHeightMeters: number | null
+  grossWeightKg: number | null
+  isRefrigerated: boolean | null
+  reeferEngineHours: number | null
+  tempMinCelsius: number | null
+  tempMaxCelsius: number | null
+  hasTailLift: boolean | null
+  hasHazardousAdr: boolean | null
+  isDoubleDeck: boolean | null
+  insuranceNumber: string | null
+  insuranceExpiresAt: Date | null
+  inspectionExpiresAt: Date | null
+  atpExpiresAt: Date | null
+  telematicsDeviceId: string | null
+  currentLat: number | null
+  currentLng: number | null
+  isActive: boolean | null
+  createdAt: Date | null
+  updatedAt: Date | null
+  currentTractorId: string | null
+} 
+
+
+
 export const DRIVER_STATUS=["AVAILABLE" , "ON_TRIP" , "ON_BREAK" , "OFF_DUTY" , "INACTIVE"] as const;
 export type DriverStatus=typeof DRIVER_STATUS[number]
 
@@ -106,4 +145,8 @@ export type VehicleType = typeof VEHICLE_TYPE[number]
 export const FUEL_TYPE=["DIESEL" , "ELECTRIC" , "CNG_LNG" , "HYBRID" , "HYDROGEN"] as const;
 export type FuelType = typeof FUEL_TYPE[number]
 export const VEHICLE_TECHNICAL_STATUS=["OPERATIONAL" , "IN_MAINTENANCE" , "OUT_OF_SERVICE" , "RESERVED"] as const;
-type VehicleTechnicalStatus = typeof VEHICLE_TECHNICAL_STATUS[number]
+export type VehicleTechnicalStatus = typeof VEHICLE_TECHNICAL_STATUS[number];
+export const TRAILER_TYPE=["CONTAINER_CHASSIS" , "CURTAINSIDER" , "BOX_TRAILER" , "REEFER" , "FLATBED" , "TANKER" , "TIPPER"] as const
+export type TrailerType = typeof TRAILER_TYPE[number];
+export const TRAILER_STATUS =["AVAILABLE" , "IN_MAINTENANCE" , "OUT_OF_SERVICE" , "ATTACHED"]as const
+export type  TrailerStatus = typeof TRAILER_STATUS[number];
