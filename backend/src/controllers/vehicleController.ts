@@ -99,3 +99,32 @@ if(!foundTruck)return res.status(404).json({message:"there is no truck with such
    return res.status(500).json({ error: 'Failed to fetch Vehicle' });
   }
 };
+
+export const searchTrucks=async (req:Request,res:Response):Promise<Response>=>{
+  try {
+    const limit=req.body?.limit||10;
+    const skip=req.body?.skip||0;
+    const status=req.body?.status;
+    const type=req.body?.type;
+    const fuelType=req.body?.type;
+    const trailerType=req.body?.type;
+    const search=req.body?.search;
+    const orderBy=req.body?.orderBy||"createdAt";
+    const orderOrientation=req.body?.orderOrientation||"desc";
+
+    let filter=[];
+    if(status)filter.push({status});
+    if(type)filter.push({type});
+     if(fuelType)filter.push({fuelType});
+      if(trailerType)filter.push({trailerType});
+    if(search)filter.push({OR:[{plateNumber:{contains:search}},{fleetNumber:{contains:search}},{vin:{contains:search}},{make:{contains:search}},{model:{contains:search}}]})
+ 
+    const trucks=await prisma.vehicle.findMany({take:limit,skip,where:{AND:filter},orderBy:{[orderBy]:orderOrientation}});
+    return res.status(200).json({message:"success",data:trucks});
+
+    
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({error,message:"Server Error, failed to get Drivers"})
+  }
+}
