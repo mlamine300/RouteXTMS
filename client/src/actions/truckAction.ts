@@ -1,0 +1,41 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import type{Vehicle} from "../types"
+import axiosClient from "../lib/axiosInstance"
+import {API_PATHS} from "../data/apiPaths"
+export const getAllTrucksAction:(params:any)=>Promise<Vehicle[]> =async(params)=>{
+    try {
+        const res=await axiosClient.post(API_PATHS.TRUCK.GET_ALL_TRUCK,{...params});
+if(res.status===200){
+    console.log(res)
+    return res.data.data;
+}
+
+    return []
+    } catch (error:any) {
+        if(error?.status===500)
+        console.log(error)
+    else console.log(error.response)
+
+    return [];
+    }
+
+}
+
+export const searchTrucksAction:(params:any)=>Promise<Vehicle[]> =async(params)=>{
+    try {
+        const res=await axiosClient.post(API_PATHS.TRUCK.SEARCH_TRUCKS,{...params});
+if(res.status===200){
+    console.log(res)
+    return res.data.data;
+}
+
+    return []
+    } catch (error:any) {
+        if(error?.status===500)
+        console.log(error)
+    else console.log(error.response)
+
+    return [];
+    }
+
+}

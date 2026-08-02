@@ -26,10 +26,11 @@ const {updateUser}=useAuthContext();
     navigate("/");
     toast.success(`Bienvenue ${res.user.username}`)
    }else{
-    setError({...error,login:res});
+    setError({...error,login:res?.error||"login error"});
    }
     setPending(false);
   }
+  
   return (
     <main className="w-full h-full lg:grid grid-cols-5 ">
       <section className=" col-span-2 hidden lg:flex max-h-screen">

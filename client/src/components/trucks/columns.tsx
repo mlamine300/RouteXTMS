@@ -138,7 +138,7 @@ export const columns:({setTruckToEdit}:{setTruckToEdit:any})=> ColumnDef<Vehicle
 
   },
        {accessorKey:"chauffeur",
-         header:()=> "Chauffeur",
+         header:()=> <p className="text-xs text-text-primary">Chauffeur</p>,
   
     
      cell:({row})=>{
@@ -157,7 +157,7 @@ export const columns:({setTruckToEdit}:{setTruckToEdit:any})=> ColumnDef<Vehicle
   },
  
        {accessorKey:"trailer",
-         header:()=> "Remorque",
+         header:()=> <p className="text-xs text-text-primary">Remorque</p>,
   
     
      cell:({row})=>{

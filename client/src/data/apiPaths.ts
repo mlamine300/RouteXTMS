@@ -12,5 +12,13 @@ export const API_PATHS={
         DELETE_DRIVER:(id:string)=>`api/driver/${id}`,
         GET_DRIVER_BY_ID:(id:string)=>`api/driver/${id}`,
         SEARCH_DRIVERS:"api/driver/list/search"
+    },
+    TRUCK:{
+        GET_ALL_TRUCK:"api/truck/list/get_trucks",
+        ADD_TRUCK:"api/truck",
+        UPDATE_TRUCK:(id:string)=>`api/truck/${id}`,
+        DELETE_TRUCK:(id:string)=>`api/truck/${id}`,
+        GET_TRUCK_BY_ID:(id:string)=>`api/truck/${id}`,
+        SEARCH_TRUCKS:"api/truck/list/search"
     }
 }
