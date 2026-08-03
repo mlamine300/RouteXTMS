@@ -15,14 +15,14 @@ import SkeletonRow from "../../../components/ui/SkeletonRow"
 import { useEffect, useState } from "react";
 import EditTrucksSheetContent from "../../../components/trucks/EditTrucksSheetContent"
 import type { Vehicle } from "@/types";
-import {getAllTrucksAction, searchTrucksAction} from "@/actions/truckAction"
+import { searchTrucksAction} from "@/actions/truckAction"
 import { useSearchParams } from "react-router";
 const TRUCK_PER_PAGE=5;
 const TrucksPage = () => {
 
 const [pending, setPending] = useState(false);
 const [showModal, setShowModal] = useState(false);
-const [truckToEdit, setTruckToEdit] = useState(null);
+const [truckToEdit, setTruckToEdit] = useState<Vehicle|null>(null);
  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const [trucks, setTrucks] = useState<Vehicle[]>([]);
 const [searchParams]=useSearchParams();
@@ -83,7 +83,7 @@ const status=searchParams.get("status")||"";
             
             <TablePagination maxPages={10} className="flex justify-end gap-2 px-2 mt-4"/>
         </section>
-        <EditTrucksSheetContent truck={truckToEdit}/>
+        {(truckToEdit&&truckToEdit?.id)&&<EditTrucksSheetContent truck={truckToEdit}/>}
         <Modal title="Ajouter un Tracteur" showModal={showModal} close={()=>setShowModal(false)}  >
            <p>hola</p>
         </Modal>

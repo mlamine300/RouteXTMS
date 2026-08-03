@@ -31,11 +31,11 @@ if(createdTruck&&createdTruck.id)return res.status(200).json({success:true,messa
   }
 };
 
-export const updateVehicle = async (req: Request, res: Response): Promise<Response> => {
+export const  updateVehicle = async (req: Request, res: Response): Promise<Response> => {
   try {
     const id=req.params.id as string;
     if(!id)return res.status(400).json({message:"id is required for this query"});
-    const foundTruck=await prisma.vehicle.findFirst({where:{id,deletedAt:null}});
+    const foundTruck=await prisma.vehicle.findFirst({where:{id}});
     if(!foundTruck||!foundTruck.id)return res.status(404).json({message:"there is no truck with such id"});
      const reqBody=req.body;
      let fieldsTocheck : any[]=[]  ;

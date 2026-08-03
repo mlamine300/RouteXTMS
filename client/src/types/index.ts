@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import type z from "zod";
+import type{vehicleSchema} from "./zod"
 export interface User{
      id: string;
      token:string;
@@ -150,3 +152,8 @@ export const TRAILER_TYPE=["CONTAINER_CHASSIS" , "CURTAINSIDER" , "BOX_TRAILER" 
 export type TrailerType = typeof TRAILER_TYPE[number];
 export const TRAILER_STATUS =["AVAILABLE" , "IN_MAINTENANCE" , "OUT_OF_SERVICE" , "ATTACHED"]as const
 export type  TrailerStatus = typeof TRAILER_STATUS[number];
+
+
+
+
+export type VehicleForm = z.infer<typeof vehicleSchema>;

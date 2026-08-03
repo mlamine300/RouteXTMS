@@ -2,6 +2,7 @@
 import type{Vehicle} from "../types"
 import axiosClient from "../lib/axiosInstance"
 import {API_PATHS} from "../data/apiPaths"
+import toast from "react-hot-toast";
 export const getAllTrucksAction:(params:any)=>Promise<Vehicle[]> =async(params)=>{
     try {
         const res=await axiosClient.post(API_PATHS.TRUCK.GET_ALL_TRUCK,{...params});
@@ -38,4 +39,20 @@ if(res.status===200){
     return [];
     }
 
+}
+
+export const editTruckAction:(id:string,params:any)=>Promise<Vehicle|null>=async(id,params)=>{
+    try {
+        const res=await axiosClient.post(API_PATHS.TRUCK.UPDATE_TRUCK(id),{...params});
+        if(res.status===200)
+        {
+            toast.success("Tracteur modifié avec succès")
+return res.data.data;
+        
+        }
+        toast.error("erreur impossible de modifier le tracteur")
+            
+    } catch (error) {
+       console.log(error) 
+    }
 }
