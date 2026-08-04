@@ -3,13 +3,13 @@
 import { SheetClose, SheetContent, SheetHeader, SheetTitle } from '../ui/sheet';
 
 import{ FUEL_TYPE, VEHICLE_TECHNICAL_STATUS, VEHICLE_TYPE, type Vehicle, type VehicleForm} from "../../types"
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
  import {  useForm } from 'react-hook-form';
-import { vehicleSchema } from '@/types/zod';
+import { vehicleSchema } from '../../types/zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form} from "../ui/form";
-import MyFormField from "@/components/ui/MyFormField"
-import Button from '../ui/button';
+import MyFormField from "../../components/ui/MyFormField"
+import Button from '../ui/Button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../ui/accordion';
 import { editTruckAction } from '../../actions/truckAction';
 const EditTrucksSheetContent = ({truck}:{truck:Vehicle|null}) => {
@@ -59,6 +59,48 @@ const EditTrucksSheetContent = ({truck}:{truck:Vehicle|null}) => {
     },
 });
 
+useEffect(() => {
+  myForm.reset({
+    fleetNumber: truck?.fleetNumber || "",
+    plateNumber: truck?.plateNumber || "",
+    vin: truck?.vin || "",
+
+    make: truck?.make || "",
+    model: truck?.model || "",
+    year: truck?.year || new Date().getFullYear(),
+
+    type: truck?.type || VEHICLE_TYPE[0],
+    fuelType: truck?.fuelType || FUEL_TYPE[0],
+    status: truck?.status || VEHICLE_TECHNICAL_STATUS[0],
+
+    maxPayloadKg: truck?.maxPayloadKg || 0,
+    maxVolumeM3: truck?.maxVolumeM3 || 0,
+
+    euroPalletCap: truck?.euroPalletCap,
+    grossWeightKg: truck?.grossWeightKg,
+    curbWeightKg: truck?.curbWeightKg,
+
+    isRefrigerated: truck?.isRefrigerated || false,
+    tempMinCelsius: truck?.tempMinCelsius,
+    tempMaxCelsius: truck?.tempMaxCelsius,
+
+    hasTailLift: truck?.hasTailLift || false,
+    hasHazardousAdr: truck?.hasHazardousAdr || false,
+
+    insuranceNumber: truck?.insuranceNumber || "",
+    insuranceExpiresAt: truck?.insuranceExpiresAt,
+
+    inspectionExpiresAt: truck?.inspectionExpiresAt,
+    tachographExpiresAt: truck?.tachographExpiresAt,
+
+    currentOdometerKm: truck?.currentOdometerKm || 0,
+
+    telematicsDeviceId: truck?.telematicsDeviceId || "",
+    fuelConsumptionAvg: truck?.fuelConsumptionAvg,
+
+    isActive: truck?.isActive !== null ? truck?.isActive : true,
+  });
+}, [truck?.id]);
   const onSubmit = async(data: VehicleForm) => {
    
     if(!truck||!truck.id)return;
@@ -117,12 +159,12 @@ const EditTrucksSheetContent = ({truck}:{truck:Vehicle|null}) => {
   placeholder='2025' value={myForm.watch("year")} />
  
       <MyFormField control={myForm.control} isRequired={true} key='type' label='Catégory'
- name='type' onChange={(e:any)=>myForm.setValue("type",e.target.value)}
-  placeholder='' value={myForm.watch("type")} />
+ name='type' placeholder='' value={myForm.watch("type")}
+  type="select" possibleValues={[...VEHICLE_TYPE]} onChange={(s:any)=>myForm.setValue("type",s)} />
   
    <MyFormField control={myForm.control} isRequired={true} key='fuelType' label='Carburant'
- name='fuelType' onChange={(e:any)=>myForm.setValue("fuelType",e.target.value)}
-  placeholder='Diesel' value={myForm.watch("fuelType")} />
+ name='fuelType' placeholder='Diesel' value={myForm.watch("fuelType")}
+   type="select" possibleValues={[...FUEL_TYPE]} onChange={(s:any)=>myForm.setValue("fuelType",s)} />
  
  <Accordion type='multiple'  className="col-span-2" >
       <AccordionItem value="capacity">
