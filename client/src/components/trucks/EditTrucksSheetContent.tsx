@@ -154,8 +154,8 @@ useEffect(() => {
  name='model' onChange={(e:any)=>myForm.setValue("model",e.target.value)}
   placeholder='T 480' value={myForm.watch("model")} />
   
-   <MyFormField control={myForm.control} isRequired={true} key='year' label='Année'
- name='year' onChange={(e:any)=>myForm.setValue("year",e.target.value)}
+   <MyFormField control={myForm.control} type='number' isRequired={true} key='year' label='Année'
+ name='year' onChange={(e:any)=>myForm.setValue("year",Number(e.target.value))}
   placeholder='2025' value={myForm.watch("year")} />
  
       <MyFormField control={myForm.control} isRequired={true} key='type' label='Catégory'
@@ -171,19 +171,19 @@ useEffect(() => {
         <AccordionTrigger>CAPACITY & DIMENSIONS</AccordionTrigger>
         <AccordionContent className='grid grid-cols-2 gap-2'>
           <MyFormField control={myForm.control} isRequired={true} key='maxPayloadKg' label='Charge Max'
- name='maxPayloadKg' onChange={(e:any)=>myForm.setValue("maxPayloadKg",e.target.value)}
+ name='maxPayloadKg' onChange={(e:any)=>myForm.setValue("maxPayloadKg",Number(e.target.value))}
   placeholder='' value={myForm.watch("maxPayloadKg")} type="number" />
   
    <MyFormField control={myForm.control} isRequired={true} key='maxVolumeM3' label='Volume Max'
- name='maxVolumeM3' onChange={(e:any)=>myForm.setValue("maxVolumeM3",e.target.value)}
+ name='maxVolumeM3' onChange={(e:any)=>myForm.setValue("maxVolumeM3",Number(e.target.value))}
   placeholder='' value={myForm.watch("maxVolumeM3")}  type="number" />
 
   <MyFormField control={myForm.control} isRequired={true} key='euroPalletCap' label='Nbr Pallettes'
- name='euroPalletCap' onChange={(e:any)=>myForm.setValue("euroPalletCap",e.target.value)}
+ name='euroPalletCap' onChange={(e:any)=>myForm.setValue("euroPalletCap",Number(e.target.value))}
   placeholder='' value={myForm.watch("euroPalletCap")} type="number" />
   
    <MyFormField control={myForm.control} isRequired={true} key='grossWeightKg' label='Poids Brut'
- name='grossWeightKg' onChange={(e:any)=>myForm.setValue("grossWeightKg",e.target.value)}
+ name='grossWeightKg' onChange={(e:any)=>myForm.setValue("grossWeightKg",Number(e.target.value))}
   placeholder='' value={myForm.watch("grossWeightKg")}  type="number" />
         </AccordionContent>
       </AccordionItem>
@@ -196,11 +196,11 @@ useEffect(() => {
   placeholder='' value={myForm.watch("isRefrigerated")}  />
   
    <MyFormField control={myForm.control} isRequired={false} key='tempMinCelsius' label='Min Températeur'
- name='tempMinCelsius' onChange={(e:any)=>myForm.setValue("tempMinCelsius",e.target.value)}
+ name='tempMinCelsius' onChange={(e:any)=>myForm.setValue("tempMinCelsius",Number(e.target.value))}
   placeholder='' value={myForm.watch("tempMinCelsius")}  type="number" />
 
   <MyFormField control={myForm.control} isRequired={false} key='tempMaxCelsius' label='Max Températeur'
- name='tempMaxCelsius' onChange={(e:any)=>myForm.setValue("tempMaxCelsius",e.target.value)}
+ name='tempMaxCelsius' onChange={(e:any)=>myForm.setValue("tempMaxCelsius",Number(e.target.value))}
   placeholder='' value={myForm.watch("tempMaxCelsius")} type="number" />
   
    <MyFormField control={myForm.control} isRequired={false} key='hasTailLift' label='Hayon'
@@ -217,7 +217,7 @@ useEffect(() => {
         <AccordionTrigger>ODOMETER & TELEMATICS</AccordionTrigger>
         <AccordionContent className='grid grid-cols-2 gap-2'>
           <MyFormField control={myForm.control} isRequired={false} key='currentOdometerKm' label='KM Odometer'
- name='currentOdometerKm' onChange={(e:any)=>myForm.setValue("currentOdometerKm",e.target.value)}
+ name='currentOdometerKm' onChange={(e:any)=>myForm.setValue("currentOdometerKm",Number(e.target.value))}
   placeholder='' value={myForm.watch("currentOdometerKm")} type="number" />
   
    <MyFormField control={myForm.control} isRequired={false} key='telematicsDeviceId' label='Appareil Id'
@@ -225,7 +225,7 @@ useEffect(() => {
   placeholder='' value={myForm.watch("telematicsDeviceId")} />
 
   <MyFormField control={myForm.control} isRequired={false} key='fuelConsumptionAvg' label='Consomation moy'
- name='fuelConsumptionAvg' onChange={(e:any)=>myForm.setValue("fuelConsumptionAvg",e.target.value)}
+ name='fuelConsumptionAvg' onChange={(e:any)=>myForm.setValue("fuelConsumptionAvg",Number(e.target.value))}
   placeholder='' value={myForm.watch("fuelConsumptionAvg")} type="number" />
   
    

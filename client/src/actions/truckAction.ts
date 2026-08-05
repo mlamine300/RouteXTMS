@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type{Vehicle} from "../types"
+import type{Vehicle, VehicleForm} from "../types"
 import axiosClient from "../lib/axiosInstance"
 import {API_PATHS} from "../data/apiPaths"
 import toast from "react-hot-toast";
@@ -54,5 +54,22 @@ return res.data.data;
             
     } catch (error) {
        console.log(error) 
+    }
+}
+
+export const addTruckAction:(truck:VehicleForm)=>Promise<Vehicle|null>=async(truck)=>{
+    try {
+        const res=await axiosClient.post(API_PATHS.TRUCK.ADD_TRUCK,{...truck});
+        if(res.status===200)
+        {
+            toast.success("Tracteur Ajouté avec succès")
+return res.data.data;
+        
+        }
+        toast.error("erreur impossible de ajouter le tracteur")
+            
+    } catch (error:any) {
+       console.log(error.response) 
+       toast.error(`erreur impossible de ajouter le tracteur;\n ${error.response.data.message}`)
     }
 }

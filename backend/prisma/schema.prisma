@@ -194,7 +194,7 @@ model Vehicle {
 
   // --- ODOMETER & TELEMATICS (IoT Integration) ---
   currentOdometerKm  Float   @default(0) @map("current_odometer_km")
-  telematicsDeviceId String? @unique @map("telematics_device_id") // OBD / Samsara / Geotab ID
+  telematicsDeviceId String?  @map("telematics_device_id") // OBD / Samsara / Geotab ID
   fuelConsumptionAvg Float?  @map("fuel_consumption_avg") // L/100km or kWh/100km
 
   // --- METADATA & TIMESTAMPS ---

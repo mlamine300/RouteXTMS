@@ -41,3 +41,42 @@ export const vehicleSchema = z.object({
 
   isActive: z.boolean(),
 });
+
+export const vehicleDefaultValues={
+    fleetNumber:  "",
+    plateNumber:  "",
+    vin:  "",
+
+    make:  "",
+    model:  "",
+    year: 1901,
+
+    type:  VEHICLE_TYPE[0],
+    fuelType:  FUEL_TYPE[0],
+    status:  VEHICLE_TECHNICAL_STATUS[0],
+
+    maxPayloadKg:  0,
+    maxVolumeM3:  0,
+
+    euroPalletCap: 0,
+    grossWeightKg: 0,
+    curbWeightKg: 0,
+
+    isRefrigerated: false,
+    tempMinCelsius: 0,
+    tempMaxCelsius: 0,
+
+    hasTailLift:  false,
+    hasHazardousAdr:false,
+
+    insuranceNumber: "",
+    insuranceExpiresAt: new Date("01-01-1901"),
+
+    inspectionExpiresAt: new Date("01-01-1901"),
+    tachographExpiresAt: new Date("01-01-1901"),
+
+    currentOdometerKm: 0,
+
+    telematicsDeviceId:  "",
+    fuelConsumptionAvg: 0,
+isActive: true,};

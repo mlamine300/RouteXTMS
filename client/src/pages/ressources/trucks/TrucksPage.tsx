@@ -6,7 +6,7 @@ import { Sheet } from "../../../components/ui/sheet";
 import FilterTableDiv from "../../../components/trucks/FilterTableDiv"
 
 import TablePagination from "../../../components/ui/TablePagination"
-import Button from "../../../components/ui/button";
+import Button from "../../../components/ui/Button";
 import { Plus } from "lucide-react";
 import Modal from "../../../components/ui/Modal"
 
@@ -14,9 +14,13 @@ import Modal from "../../../components/ui/Modal"
 import SkeletonRow from "../../../components/ui/SkeletonRow"
 import { useEffect, useState } from "react";
 import EditTrucksSheetContent from "../../../components/trucks/EditTrucksSheetContent"
-import type { Vehicle } from "@/types";
-import { searchTrucksAction} from "@/actions/truckAction"
+import {  type Vehicle, type VehicleForm } from "../../../types";
+import { searchTrucksAction} from "../../../actions/truckAction"
 import { useSearchParams } from "react-router";
+import AddTruckForm from "../../../components/trucks/AddTruckForm";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { vehicleDefaultValues, vehicleSchema } from "../../../types/zod";
 const TRUCK_PER_PAGE=5;
 const TrucksPage = () => {
 
@@ -44,6 +48,14 @@ const status=searchParams.get("status")||"";
    }
   getTrucks();
  },[searchParams])
+
+  const addTruckForm = useForm<VehicleForm>({
+    resolver: zodResolver(vehicleSchema),
+
+    defaultValues: vehicleDefaultValues,
+    
+});
+
   return (
     <main className=' page-layout bg-background-base'>
          <Sheet>
@@ -84,8 +96,8 @@ const status=searchParams.get("status")||"";
             <TablePagination maxPages={10} className="flex justify-end gap-2 px-2 mt-4"/>
         </section>
         {(truckToEdit&&truckToEdit?.id)&&<EditTrucksSheetContent truck={truckToEdit}/>}
-        <Modal title="Ajouter un Tracteur" showModal={showModal} close={()=>setShowModal(false)}  >
-           <p>hola</p>
+        <Modal className="min-w-8/12 min-h-10/12 overflow-y-auto " title="Ajouter un Tracteur" showModal={showModal} close={()=>setShowModal(false)}  >
+          <AddTruckForm form={addTruckForm} />
         </Modal>
        </Sheet>
     </main>

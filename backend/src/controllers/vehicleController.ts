@@ -4,10 +4,10 @@ import { formatLicenceNumber } from '../utils/index.js';
 
 export const createVehicle = async (req: Request, res: Response): Promise<Response> => {
   try {
-    const {plateNumber,vin,make,model,year,type,fuelType,
+    const {fleetNumber,plateNumber,vin,make,model,year,type,fuelType,
            maxPayloadKg,maxVolumeM3,euroPalletCap,grossWeightKg,curbWeightKg}=req?.body; 
-           if(!plateNumber||!make||!model||!year||!type||!fuelType||!maxPayloadKg||!maxVolumeM3){
-            return res.status(400).json({success:false,message:"plateNumber,make,model,year,type,fuelType, maxPayloadKg,maxVolumeM3 are required!!"})
+           if(!fleetNumber||!plateNumber||!make||!model||!year||!type||!fuelType||!maxPayloadKg||!maxVolumeM3){
+            return res.status(400).json({success:false,message:"fleetNumber,plateNumber,make,model,year,type,fuelType, maxPayloadKg,maxVolumeM3 are required!!"})
            }
      const  {
 isRefrigerated,tempMinCelsius,tempMaxCelsius,hasTailLift,hasHazardousAdr,insuranceNumber,
@@ -16,11 +16,11 @@ let foundTruckFieldTocheck=[{plateNumber}] as any[]
 if(vin&&vin.length>0)foundTruckFieldTocheck.push({vin})
 if(telematicsDeviceId&&telematicsDeviceId.length>0)foundTruckFieldTocheck.push({telematicsDeviceId})
 const foundTruck=await prisma.vehicle.findMany({where:{OR:foundTruckFieldTocheck}});
-if(foundTruck&&foundTruck.length>0)return res.status(400).json({success:false,message:"a Vehicle with such plateNumber or vin or telematicsDeviceId"})
+if(foundTruck&&foundTruck.length>0)return res.status(400).json({success:false,message:"a Vehicle with such plateNumber or vin or telematicsDeviceId already exist thoes values should be unique"})
     
-const createdTruck=await prisma.vehicle.create({data:{plateNumber,vin,make,model,year,type,fuelType,
+const createdTruck=await prisma.vehicle.create({data:{fleetNumber,plateNumber,vin,make,model,year,type,fuelType,
            maxPayloadKg,maxVolumeM3,euroPalletCap,grossWeightKg,curbWeightKg,isRefrigerated,tempMinCelsius,tempMaxCelsius,hasTailLift,hasHazardousAdr,insuranceNumber,
-insuranceExpiresAt,inspectionExpiresAt,tachographExpiresAt,currentOdometerKm,telematicsDeviceId}})
+insuranceExpiresAt,inspectionExpiresAt,tachographExpiresAt,currentOdometerKm,telematicsDeviceId:telematicsDeviceId&&telematicsDeviceId.length>0?telematicsDeviceId:null}})
 
 if(createdTruck&&createdTruck.id)return res.status(200).json({success:true,message:"vehicle created successfully!!!",data:createdTruck});
 
