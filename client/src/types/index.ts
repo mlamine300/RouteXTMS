@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type z from "zod";
-import type{vehicleSchema} from "./zod"
+import type{driverSchema, vehicleSchema} from "./zod"
 export interface User{
      id: string;
      token:string;
@@ -41,6 +41,7 @@ export interface MenuItemType{
 
 export type Driver = {
   id: string ;
+  assignedParcId:string|null;
   userId: string ;
   firstName: string ;
   lastName: string ;
@@ -62,10 +63,20 @@ export type Driver = {
   updatedAt: Date | null
   assignedVehicleId: string | null
   assignedVehicle:Vehicle|null
+  attachedParc:Parc |null
 }
-
+export type Parc={
+  id:string|null;
+  name:string|null;
+  positionLat:number | null;
+  positionLng:number | null;
+  drivers?:Driver[]|null;
+  trailers?:Trailer[]|null;
+  vehicles?:Vehicle[]|null;
+}
 export type Vehicle = {
   id: string | null
+   assignedParcId:string|null;
   fleetNumber: string | null
   plateNumber: string | null
   vin: string | null
@@ -97,11 +108,14 @@ export type Vehicle = {
   updatedAt: Date | null
   assignedDriverId: string | null
   attachedTrailerId: string | null
+  attachedParcId: string | null
    assignedDriver:Driver |null
    attachedTrailer:Trailer |null
+   attachedParc:Parc |null
 }
 export type Trailer={
     id: string 
+     assignedParcId:string|null;
   fleetNumber: string 
   plateNumber: string 
   vin: string 
@@ -157,3 +171,4 @@ export type  TrailerStatus = typeof TRAILER_STATUS[number];
 
 
 export type VehicleForm = z.infer<typeof vehicleSchema>;
+export type DriverForm = z.infer<typeof driverSchema>;

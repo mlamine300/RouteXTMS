@@ -156,8 +156,22 @@ model Driver {
   assignedVehicleId String?           @unique @map("assigned_vehicle_id")
   statusLogs        DriverStatusLog[]
   shipments         Shipment[]
+  assignedParc   Parc          @relation(fields: [assignedParcId], references: [id])
+  assignedParcId String         @map("assigned_parc_id")
 
   @@map("drivers")
+ 
+}
+model Parc {
+  id String @id @default(uuid())
+  name String @unique
+  positionLat Float @map("position_lat")
+  positionLng Float @map("position_lng")
+  drivers     Driver[]
+  vehicles    Vehicle[]
+  trailers  Trailer[]
+
+  @@map("parcs")
 }
 
 model Vehicle {
@@ -214,7 +228,9 @@ model Vehicle {
   shipments       Shipment[]
   maintenanceLogs VehicleMaintenance[]
   driver          Driver?
-
+ assignedParc   Parc          @relation(fields: [assignedParcId], references: [id])
+  assignedParcId String         @map("assigned_parc_id")
+ 
   @@map("vehicles")
 }
 
@@ -270,6 +286,9 @@ model Trailer {
 
   shipments       Shipment[]
   maintenanceLogs TrailerMaintenance[]
+
+  assignedParc  Parc @relation(fields: [assignedParcId], references: [id])
+  assignedParcId  String @map("assigned_parc_id")
 
   @@map("trailers")
 }

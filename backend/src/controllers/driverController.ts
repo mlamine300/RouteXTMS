@@ -4,7 +4,7 @@ import { formatEmail, formatLicenceNumber, formatName, formatPhoneNumber } from 
 export const createDriver = async (req: Request, res: Response): Promise<Response> => {
   try {
 
-    const {firstName,lastName,phone,email,isEmployee,employeeId,licenseNumber
+    const {assignedParcId,firstName,lastName,phone,email,isEmployee,employeeId,licenseNumber
         ,LicenseCategory,licenseExpiresAt,medicalCheckExpiresAt,fimoExpiresAt,
         status,isActive
       
@@ -19,7 +19,8 @@ export const createDriver = async (req: Request, res: Response): Promise<Respons
     if(fEmail&&fEmail.length>3){
 duplicateFields.push({email:fEmail})
     }
-    if(!fFirstName||!fLastName||!fPhone||!fLicenceNumbre)return res.status(400).json({message:"firsName, LastName, phone and Licence Number is needed to create a driver"})
+    
+    if(assignedParcId||!fFirstName||!fLastName||!fPhone||!fLicenceNumbre)return res.status(400).json({message:"parc, firsName, LastName, phone and Licence Number is needed to create a driver"})
    const foundDriver=await prisma.driver.findFirst({where:{OR:duplicateFields}});
 if(foundDriver&&foundDriver.id)return res.status(400).json({message:"a driver with phone | licence | email number already exist"})
 
@@ -27,7 +28,7 @@ if(foundDriver&&foundDriver.id)return res.status(400).json({message:"a driver wi
     const dMedicalCheckExpiresAt=new Date(medicalCheckExpiresAt)||new Date("2999-12-30")
     const dFimoExpiresAt=new Date(fimoExpiresAt)||new Date("2999-12-30")
    
-    const result=await prisma.driver.create({data:{firstName:fFirstName,lastName:fLastName,phone:fPhone,email,isEmployee,employeeId,licenseNumber:fLicenceNumbre
+    const result=await prisma.driver.create({data:{assignedParcId,firstName:fFirstName,lastName:fLastName,phone:fPhone,email,isEmployee,employeeId,licenseNumber:fLicenceNumbre
         ,LicenseCategory,licenseExpiresAt:dLicenseExpiresAt,medicalCheckExpiresAt:dMedicalCheckExpiresAt,fimoExpiresAt:dFimoExpiresAt,
         status:status||'AVAILABLE',isActive:isActive||true}});
         if(result&&result.id)
@@ -104,13 +105,32 @@ export const searchDrivers=async (req:Request,res:Response):Promise<Response>=>{
     const search=req.body?.search;
     const orderBy=req.body?.orderBy||"createdAt";
     const orderOrientation=req.body?.orderOrientation||"desc";
+    const assignedParcId=req.body?.assignedParcId
 
     let filter=[];
     if(status)filter.push({status});
+     if(assignedParcId)filter.push({assignedParcId});
     if(licenseCategories&&licenseCategories.length>0)filter.push({licenseCategories:{hasSome:licenseCategories}});
     if(search)filter.push({OR:[{licenseNumber:{contains:search}},{phone:{contains:search}},{firstName:{contains:search}},{lastName:{contains:search}}]})
   console.log(JSON.stringify(filter))
-    const drivers=await prisma.driver.findMany({take:limit,skip,where:{AND:filter},orderBy:{[orderBy]:orderOrientation}});
+    const drivers=await prisma.driver.findMany({take:limit,skip,where:{AND:filter},orderBy:{[orderBy]:orderOrientation}, include: {
+  assignedParc: {
+    select: {
+      id: true,
+      name: true,
+      positionLat: true,
+      positionLng: true,
+    },
+    
+  },
+  assignedVehicle:{select:
+    {
+      id:true,
+      make:true,
+      model:true,
+      plateNumber:true
+  }}
+}});
     return res.status(200).json({message:"success",data:drivers});
 
     return res.status(200)

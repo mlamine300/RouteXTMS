@@ -1,7 +1,10 @@
 import parsePhoneNumberFromString from "libphonenumber-js";
 
 export const formatPhoneNumber=(phone:string)=>{
-    return parsePhoneNumberFromString(phone)?.formatInternational()
+   
+    const r=parsePhoneNumberFromString(phone)?.formatInternational();
+    if(r)return r;
+    return parsePhoneNumberFromString(phone,"FR")?.formatInternational();
 }
 
 export const formatLicenceNumber=(licenseNumber:string)=>{

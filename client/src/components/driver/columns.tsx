@@ -4,7 +4,7 @@
 
 import type { ColumnDef } from "@tanstack/react-table"
 import type { CSSProperties } from "react"
-import {   ArrowDown, ArrowUp, ArrowUpDown, Pen} from "lucide-react";
+import {   ArrowDown, ArrowUp, ArrowUpDown, Pen, Plug} from "lucide-react";
 import type{Driver} from "../../types/index"
 import { SheetTrigger } from "../ui/sheet";
 import { differenceInDays, format } from "date-fns";
@@ -15,7 +15,7 @@ import { useSearchParams } from "react-router";
 
 
 
-export const columns:({setdriverToEdit}:{setdriverToEdit:any})=> ColumnDef<Driver>[] =({setdriverToEdit})=> [
+export const columns:({setdriverToEdit,setModalType}:{setdriverToEdit:any,setModalType:any})=> ColumnDef<Driver>[] =({setdriverToEdit,setModalType})=> [
   {accessorKey:"driver",
    header:()=> getHeader({sortBy:"firstName",title:"Chauffeur"}),
     
@@ -31,6 +31,26 @@ export const columns:({setdriverToEdit}:{setdriverToEdit:any})=> ColumnDef<Drive
       <p  className="italic text-xs">
         {phoneNumber}
       </p>
+      </div>
+      
+    }
+
+  },
+   {accessorKey:"parc",
+    header:()=> <p className="text-xs">Parc</p>,
+  
+    
+    cell:({row})=>{
+    const parc=row.original.attachedParc;
+    
+  //${vehicle.plateNumber}
+      return <div  className="flex justify-between hover:bg-primary/10 px-2 py-1 rounded active:bg-primary/30">
+       {(parc&&parc.id)? <div className="flex flex-col">
+        <p className="text-lg font-semibold">{parc.name} </p>
+        
+      </div>
+      :  "Non Attaché"}
+      <Plug/>
       </div>
       
     }
@@ -91,11 +111,18 @@ export const columns:({setdriverToEdit}:{setdriverToEdit:any})=> ColumnDef<Drive
     
     cell:({row})=>{
     const vehicle=row.original.assignedVehicle;
-    if(!vehicle||!vehicle.fleetNumber)return "Pas De Camion"
+    
   //${vehicle.plateNumber}
-      return <div className="flex flex-col">
+      return <div onClick={()=>{
+        setModalType("plugin");
+        setdriverToEdit(row.original)
+      }} className="flex justify-between hover:bg-primary/10 px-2 py-1 rounded active:bg-primary/30">
+       {(vehicle&&vehicle.id)? <div className="flex flex-col">
         <p className="text-lg font-semibold">{`${vehicle.make} ${vehicle.model} `} </p>
         <p>{vehicle.plateNumber}</p>
+      </div>
+      :  "Pas De Camion"}
+      <Plug/>
       </div>
       
     }

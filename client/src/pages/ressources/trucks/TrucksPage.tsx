@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import {DataTable} from "../../../components/ui/data-table"
 import {columns} from "../../../components/trucks/columns"
@@ -50,7 +51,7 @@ const status=searchParams.get("status")||"";
  },[searchParams])
 
   const addTruckForm = useForm<VehicleForm>({
-    resolver: zodResolver(vehicleSchema),
+    resolver: zodResolver(vehicleSchema) as any,
 
     defaultValues: vehicleDefaultValues,
     

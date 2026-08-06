@@ -1,6 +1,11 @@
 import { z } from "zod";
-import {  FUEL_TYPE, VEHICLE_TECHNICAL_STATUS, VEHICLE_TYPE} from "./index"
+import {  DRIVER_STATUS, DriverForm, FUEL_TYPE, LICENSE_CATEGORY, VEHICLE_TECHNICAL_STATUS, VEHICLE_TYPE} from "./index"
 export const vehicleSchema = z.object({
+  assignedParcId:z
+    .string()
+    .uuid("Invalid Parc ID")
+    .optional()
+    .nullable(),
   fleetNumber: z.string().optional(),
   plateNumber: z.string().min(1),
   vin: z.string().optional(),
@@ -39,10 +44,83 @@ export const vehicleSchema = z.object({
 
   fuelConsumptionAvg: z.number().nullable().optional(),
 
-  isActive: z.boolean(),
+  isActive: z.boolean().default(true),
 });
 
+export const driverSchema = z.object({
+  assignedParcId:z
+    .string()
+    .uuid("Invalid Parc ID")
+    .optional()
+    .nullable(),
+  firstName: z
+    .string()
+    .trim()
+    .min(2, "First name must be at least 2 characters")
+    .max(100),
+
+  lastName: z
+    .string()
+    .trim()
+    .min(2, "Last name must be at least 2 characters")
+    .max(100),
+
+  phone: z
+    .string()
+    .trim()
+    .min(8, "Phone number is too short")
+    .max(20),
+
+  email: z
+    .string()
+    .trim()
+    .email("Invalid email address")
+    .optional()
+    .or(z.literal("")),
+
+  isEmployee: z.boolean().default(true),
+
+  employeeId: z
+    .string()
+    .trim()
+    .min(1, "Employee ID is required"),
+
+  licenseNumber: z
+    .string()
+    .trim()
+    .min(1, "License number is required"),
+
+  licenseCategories: z
+    .array(z.enum([...LICENSE_CATEGORY]))
+    .min(1, "Select at least one license category"),
+
+  licenseExpiresAt: z.coerce.date("please provide a correct date"),
+  medicalCheckExpiresAt: z.coerce.date().optional().nullable(),
+
+  fimoExpiresAt: z.coerce.date().optional().nullable(),
+
+  status: z.enum([...DRIVER_STATUS]).default(DRIVER_STATUS[0]),
+
+  isActive: z.boolean().default(true),
+
+  assignedVehicleId: z
+    .string()
+    .uuid("Invalid vehicle ID")
+    .optional()
+    .nullable(),
+
+  userId: z
+    .string()
+    .uuid("Invalid user ID")
+    .optional()
+    .nullable(),
+});
+
+
+
+
 export const vehicleDefaultValues={
+  assignedParcId:"",
     fleetNumber:  "",
     plateNumber:  "",
     vin:  "",
@@ -80,3 +158,22 @@ export const vehicleDefaultValues={
     telematicsDeviceId:  "",
     fuelConsumptionAvg: 0,
 isActive: true,};
+
+export const driverDefaultValues: DriverForm = {
+  assignedParcId:"",
+  firstName: "",
+  lastName: "",
+  phone: "",
+  email: "",
+  isEmployee: true,
+  employeeId: "",
+  licenseNumber: "",
+  licenseCategories: [],
+  licenseExpiresAt: new Date(),
+  medicalCheckExpiresAt: null,
+  fimoExpiresAt: null,
+  status: DRIVER_STATUS[0],
+  isActive: true,
+  assignedVehicleId: null,
+  userId: null,
+};

@@ -32,14 +32,18 @@ const MyFormField = ({name,control,value,label,placeholder,onChange,isRequired,t
             
 
               
-              :(type&&type==="select-multipe")?
+              :(type&&type==="select-multiple")?
                <div className={"bg-background-base flex flex-col items-start gap-0 "}>
                 <label className={'capitalize w-full flex text-xs italic '} htmlFor={`select-${name}`}>{label} </label>
              <SelectMultiple 
              name={name}
                value={value} label={label} possibleValues={possibleValues} onValueChange={onChange} />
               </div>
-              
+              :(type&&type==="boolean")?
+               <div className={"bg-background-base flex flex-col items-start gap-0 max-w-10/12"}>
+                <label className={'capitalize w-full flex text-xs italic '} htmlFor={`select-${name}`}>{label} </label>
+              <MySelect label={label} name={name} onChange={onChange} possibleValues={["oui","non"]} value={value}/>
+              </div>
              : (<Input
               parentClassName="bg-background-base flex flex-col items-start gap-0"
               labelClassName={"capitalize w-full flex text-xs italic "}
