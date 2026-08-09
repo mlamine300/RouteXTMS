@@ -4,7 +4,7 @@
 
 import type { ColumnDef } from "@tanstack/react-table"
 import type { CSSProperties } from "react"
-import {   ArrowDown, ArrowUp, ArrowUpDown, Pen} from "lucide-react";
+import {   ArrowDown, ArrowUp, ArrowUpDown, Pen, Plug} from "lucide-react";
 import type{Driver, Vehicle} from "../../types/index"
 import { SheetTrigger } from "../ui/sheet";
 import { differenceInDays, format } from "date-fns";
@@ -58,6 +58,26 @@ export const columns:({setTruckToEdit}:{setTruckToEdit:any})=> ColumnDef<Vehicle
 
   }
   ,
+  {accessorKey:"parc",
+    header:()=> <p className="text-xs">Parc</p>,
+  
+    
+    cell:({row})=>{
+    const parc=row.original.assignedParc;
+    
+  //${vehicle.plateNumber}
+      return <div  className="flex justify-between items-center hover:bg-primary/10 px-2 py-1 rounded active:bg-primary/30">
+       {(parc&&parc.name)? <div className="flex flex-row">
+        <p className="text-xs font-semibold   max-w-[120px] text-wrap">{parc.name} </p>
+        
+      </div>
+      :  "Non Attaché"}
+      <Plug/>
+      </div>
+      
+    }
+
+  },
 
      {accessorKey:"status",
   

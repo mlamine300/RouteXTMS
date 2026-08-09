@@ -22,6 +22,7 @@ import AddTruckForm from "../../../components/trucks/AddTruckForm";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { vehicleDefaultValues, vehicleSchema } from "../../../types/zod";
+import {parcs} from "../../../data/data"
 const TRUCK_PER_PAGE=5;
 const TrucksPage = () => {
 
@@ -32,6 +33,7 @@ const [truckToEdit, setTruckToEdit] = useState<Vehicle|null>(null);
 const [trucks, setTrucks] = useState<Vehicle[]>([]);
 const [searchParams]=useSearchParams();
 const status=searchParams.get("status")||"";
+const parc=searchParams.get("parc_id")||"";
   const type=searchParams.get("type")||"";
   const fuel=searchParams.get("fuel")||"";
   const trailer=searchParams.get("trailer")||"";
@@ -43,7 +45,7 @@ const status=searchParams.get("status")||"";
  useEffect(()=>{
    const getTrucks=async()=>{
     setPending(true)
-   const res= await searchTrucksAction({status,type,fuel,trailer,page,search,limit:TRUCK_PER_PAGE,skip});
+   const res= await searchTrucksAction({status,type,fuel,trailer,page,search,limit:TRUCK_PER_PAGE,skip,assignedParcId:parc});
   setPending(false);
    if(res)setTrucks(res)
    }
@@ -68,7 +70,7 @@ const status=searchParams.get("status")||"";
                 <Button text="Ajouter un Tracteur" variant="outline" className="h-10 2xl:h-16 px-6 py-1 flex items-center gap-2" icon={Plus} onClick={()=>setShowModal(true)} />
              </div>
         <section className=" w-full h-full p-2   rounded-lg shadow-2xl">
-            <FilterTableDiv/>
+            <FilterTableDiv parcs={parcs}/>
         </section>
         
       </div>

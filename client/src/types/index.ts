@@ -111,7 +111,7 @@ export type Vehicle = {
   attachedParcId: string | null
    assignedDriver:Driver |null
    attachedTrailer:Trailer |null
-   attachedParc:Parc |null
+   assignedParc:Parc |null
 }
 export type Trailer={
     id: string 

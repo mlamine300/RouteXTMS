@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/set-state-in-effect */
 import { cn } from '@/lib/utils';
 import { useState, useEffect } from 'react';
@@ -10,12 +11,13 @@ import { AccordionContent, Accordion, AccordionItem, AccordionTrigger } from '..
 
 import { FaFileExcel } from 'react-icons/fa6';
 import{ FUEL_TYPE, TRAILER_TYPE, VEHICLE_TECHNICAL_STATUS, VEHICLE_TYPE } from '@/types';
-import type {FuelType, TrailerType, VehicleTechnicalStatus, VehicleType} from "@/types"
+import type {FuelType, TrailerType, VehicleTechnicalStatus, VehicleType,Parc} from "@/types"
+import MySelect from '../ui/MySelect';
 
  
 //import { DropdownMenuRadio } from '../main/DropDownMenuRadio';
 
-const FilterTableDiv = ({ className }: { className?: string }) => {
+const FilterTableDiv = ({ className,parcs }: { className?: string,parcs: Parc [] }) => {
   const { pathname } = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   // 1. Initialize state directly from URL parameters
@@ -26,6 +28,9 @@ const [pending,setPending]=useState(false)
   const [fuelType, setFuelType] = useState<FuelType|"">("");
   const [trailerType, setTrailerType] = useState<TrailerType|"">("");
 
+  const [assignedParcId, setAssignedParcId] = useState<string>(searchParams.get("parc_id") || "");
+  
+  const assignedParc=(assignedParcId&&assignedParcId.length>0)? parcs.filter(p=>p.id===assignedParcId).at(0):null;
 
   // 2. Single effect to sync State -> URL Params (Debounced)
   useEffect(() => {
@@ -36,7 +41,7 @@ const [pending,setPending]=useState(false)
         if (value) params.set(key, String(value));
         else params.delete(key);
       };
-     
+     updateParam("parc_id", assignedParcId);
       updateParam("search", search);
       updateParam("status",status);
          updateParam("type", type);
@@ -53,11 +58,12 @@ const [pending,setPending]=useState(false)
 
     return () => clearTimeout(handler);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search,status,type,fuelType,trailerType]);
+  }, [search,status,type,fuelType,trailerType,assignedParcId]);
 // Sync URL Params -> State (Handles browser Back/Forward or external URL changes)
   useEffect(() => {
    
     const pSearch = searchParams.get("search") || "";
+     const pParc = searchParams.get("parc_id") || "";
     const pStatus: VehicleTechnicalStatus | "" = (searchParams.get("status") as VehicleTechnicalStatus) || "";
     const pType: VehicleType | "" = (searchParams.get("type") as VehicleType) || "";
     const pFuel: FuelType | "" = (searchParams.get("fuel") as FuelType) || "";
@@ -72,6 +78,7 @@ const [pending,setPending]=useState(false)
 
     // The safe way: Only update state if the URL value is actually different!
     setSearch(prev => prev !== pSearch ? pSearch : prev);
+    setAssignedParcId(prev => prev !== pParc ? pParc : prev);
     setStatus(prev => prev !== pStatus ? pStatus : prev);
     setType(prev => prev !== pType ? pType : prev);
     setFuelType(prev => prev !== pFuel ? pFuel : prev);
@@ -86,6 +93,7 @@ const [pending,setPending]=useState(false)
   const handleReset = () => {
    
     setSearch("");
+    setAssignedParcId("")
     setStatus("");
    setType("");
    setFuelType("");
@@ -118,81 +126,50 @@ const [pending,setPending]=useState(false)
               
              
 
-              <div className="flex flex-col items-start gap-0">
+               <div className="flex flex-col items-start gap-0 mx-px">
+                <label className='w-full flex text-xs italic'>Parc</label>
+              <MySelect label='Parc' name='assignedParcId' possibleValues={parcs.map((p:Parc)=>p.name||"")} value={assignedParc?.name??""} onChange={(s:string)=>setAssignedParcId(parcs.filter((p:Parc)=>p.name===s).at(0)?.id||"")} />
+               </div>
+
+               <div className="flex flex-col items-start gap-0 mx-px">
                 <label className='w-full flex text-xs italic'>Status</label>
-                <Select value={status} onValueChange={(v:string)=>setStatus((v as VehicleTechnicalStatus)||"")}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Status" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-background-base">
-                    <p className='text-sm hover:cursor-pointer p-2' onClick={() => setStatus("")}>
-                      Status
-                    </p>
-                    {VEHICLE_TECHNICAL_STATUS?.map((val) => (
-                      <SelectItem className="cursor-pointer hover:bg-gray-hot" key={val} value={val}>
-                        {val}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <MySelect label={"Status"} name='status'
+                 onChange={(v:string)=>setStatus((v as VehicleTechnicalStatus)||"")} 
+                 value={status}
+                 possibleValues={[...VEHICLE_TECHNICAL_STATUS]}  />
+               
               </div>
 
-              <div className="flex flex-col items-start gap-0">
+              <div className="flex flex-col items-start gap-0 mx-1">
                 <label className='w-full flex text-xs italic'>Catégory de Tracteur</label>
-                <Select value={type} onValueChange={(value)=>setType((value as VehicleType)||"")}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Catégory" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-background-base">
-                    <p className='text-sm hover:cursor-pointer p-2' onClick={() => setType("")}>
-                      Catégory
-                    </p>
-                    {VEHICLE_TYPE?.map((val) => (
-                      <SelectItem className="cursor-pointer hover:bg-gray-hot" key={val} value={val}>
-                        {val}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <MySelect label={"Catégory de Tracteur"} name='category'
+                 onChange={(value:any)=>setType((value as VehicleType)||"")} 
+                 value={type}
+                 possibleValues={[...VEHICLE_TYPE]}  />
+               
               </div>
 
-              <div className="flex flex-col items-start gap-0">
+
+  <div className="flex flex-col items-start gap-0 mx-px">
                 <label className='w-full flex text-xs italic'>Carburant</label>
-                <Select value={fuelType} onValueChange={(value)=>setFuelType((value as FuelType)||"")}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Catégory" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-background-base">
-                    <p className='text-sm hover:cursor-pointer p-2' onClick={() => setFuelType("")}>
-                      Carburant
-                    </p>
-                    {FUEL_TYPE?.map((val) => (
-                      <SelectItem className="cursor-pointer hover:bg-gray-hot" key={val} value={val}>
-                        {val}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <MySelect label={"Carburant"} name='fuel'
+                 onChange={(value:any)=>setFuelType((value as FuelType)||"")} 
+                 value={fuelType}
+                 possibleValues={[...FUEL_TYPE]}  />
+               
               </div>
-            
-            <div className="flex flex-col items-start gap-0">
+             
+             <div className="flex flex-col items-start gap-0 mx-px">
                 <label className='w-full flex text-xs italic'>Remorque</label>
-                <Select value={trailerType+""} onValueChange={(value)=>setTrailerType((value as TrailerType)||"")}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Catégory" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-background-base">
-                    <p className='text-sm hover:cursor-pointer p-2' onClick={() => setFuelType("")}>
-                      Remorque
-                    </p>
-                    {TRAILER_TYPE?.map((val) => (
-                      <SelectItem className="cursor-pointer hover:bg-gray-hot" key={val} value={val}>
-                        {val}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div> 
+                <MySelect label={"Remorque"} name='trailler'
+                 onChange={(value:any)=>setTrailerType((value as TrailerType)||"")} 
+                 value={trailerType}
+                 possibleValues={[...TRAILER_TYPE]}  />
+               
+              </div>
+             
+            
+          
              
             </div>
 
