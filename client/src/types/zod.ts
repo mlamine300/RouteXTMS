@@ -1,5 +1,5 @@
 import { z } from "zod";
-import {  DRIVER_STATUS, DriverForm, FUEL_TYPE, LICENSE_CATEGORY, VEHICLE_TECHNICAL_STATUS, VEHICLE_TYPE} from "./index"
+import {  DRIVER_STATUS, FUEL_TYPE, LICENSE_CATEGORY, VEHICLE_TECHNICAL_STATUS, VEHICLE_TYPE, type DriverForm} from "./index"
 export const vehicleSchema = z.object({
   assignedParcId:z
     .string()
@@ -115,6 +115,17 @@ export const driverSchema = z.object({
     .optional()
     .nullable(),
 });
+
+export const parcSchema=z.object({
+  name:z.string()
+    .trim()
+    .min(2, "nom devrait etre entre 2 et 100 caracteres")
+    .max(100),
+  positionLat: z.float32("position latitude devrait etre un float"),
+  positionLng: z.float32("position longitude devrait être un float"),
+  
+
+})
 
 
 

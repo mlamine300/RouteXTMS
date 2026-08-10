@@ -170,6 +170,7 @@ model Parc {
   drivers     Driver[]
   vehicles    Vehicle[]
   trailers  Trailer[]
+  deletedAt DateTime? @map("deleted_at") @db.Date
 
   @@map("parcs")
 }

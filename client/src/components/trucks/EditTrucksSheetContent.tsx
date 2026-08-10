@@ -9,13 +9,13 @@ import { vehicleSchema } from '../../types/zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form} from "../ui/form";
 import MyFormField from "../../components/ui/MyFormField"
-import Button from '../ui/Button';
+import Button from '../ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../ui/accordion';
 import { editTruckAction } from '../../actions/truckAction';
 const EditTrucksSheetContent = ({truck}:{truck:Vehicle|null}) => {
 
   const myForm = useForm<VehicleForm>({
-    resolver: zodResolver(vehicleSchema),
+    resolver: zodResolver(vehicleSchema as any),
 
     defaultValues: {
         fleetNumber:truck?.fleetNumber || "",

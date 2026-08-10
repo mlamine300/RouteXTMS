@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/set-state-in-effect */
-import { cn } from '@/lib/utils';
+import { cn } from '../../lib/utils';
 import { useState, useEffect } from 'react';
 
 import Input from '../ui/Input';
 import { useLocation, useSearchParams } from 'react-router';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+
 
 import { AccordionContent, Accordion, AccordionItem, AccordionTrigger } from '../ui/accordion';
 
 import { FaFileExcel } from 'react-icons/fa6';
-import{ FUEL_TYPE, TRAILER_TYPE, VEHICLE_TECHNICAL_STATUS, VEHICLE_TYPE } from '@/types';
-import type {FuelType, TrailerType, VehicleTechnicalStatus, VehicleType,Parc} from "@/types"
+import{ FUEL_TYPE, TRAILER_TYPE, VEHICLE_TECHNICAL_STATUS, VEHICLE_TYPE } from '../../types';
+import type {FuelType, TrailerType, VehicleTechnicalStatus, VehicleType,Parc} from "../../types"
 import MySelect from '../ui/MySelect';
 
  

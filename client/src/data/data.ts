@@ -7,7 +7,7 @@ import {
 import {  BsTruckFlatbed   } from "react-icons/bs";
 
 
-import {  Folders, Gem, SquareUser,   } from "lucide-react";
+import {  Folders, Gem, SquareUser, Warehouse,   } from "lucide-react";
 import { FaTools,  } from "react-icons/fa";
 import { FaTrailer } from "react-icons/fa6";
 import { Parc } from "../types";
@@ -27,36 +27,43 @@ export const SIDE_MENU_ADMIN_DATA = [
     path: "/resources",
     hasChilds:true,
       childs:[
-      {
+         {
       id:"21",
+      label: "Parcs",
+      icon: Warehouse,
+      path: "/parcs",
+
+    },
+      {
+      id:"22",
       label: "Chauffeurs",
       icon: SquareUser,
       path: "/drivers",
 
     },
      {
-      id:"22",
+      id:"23",
       label: "Tracteur ",
       icon: BsTruckFlatbed ,
       path: "/trucks",
 
     },
         {
-      id:"23",
+      id:"24",
       label: "Tractable (remorque)",
       icon: FaTrailer,
       path: "/trailers",
 
     },
     {
-      id:"24",
+      id:"25",
       label: "Equipments",
       icon: FaTools,
       path: "/equipments",
 
     },
     {
-      id:"25",
+      id:"26",
       label: "Documents liés aux ressources",
       icon: Folders,
       path: "/ressourcesdocuments",

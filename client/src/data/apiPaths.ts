@@ -20,5 +20,14 @@ export const API_PATHS={
         DELETE_TRUCK:(id:string)=>`api/truck/${id}`,
         GET_TRUCK_BY_ID:(id:string)=>`api/truck/${id}`,
         SEARCH_TRUCKS:"api/truck/list/search"
+    },
+    PARC:{
+        GET_ALL_PARC:"api/parc",
+        ADD_PARC:"api/parc",
+        UPDATE_PARC:(id:string)=>`api/parc/${id}`,
+        DELETE_PARC:(id:string)=>`api/parc/delete/${id}`,
+        GET_PARC_BY_ID:(id:string)=>`api/parc/${id}`,
+        SEARCH_PARC:"api/parc/list/search"
+
     }
 }
