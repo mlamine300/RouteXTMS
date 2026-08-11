@@ -151,6 +151,71 @@ if(!foundDriver)return res.status(404).json({message:"there is no driver with su
 
   } catch (error) {
     console.error(error);
- return   res.status(500).json({ error: 'Failed to fetch Driver' });
+ return   res.status(500).json({ message: 'Failed to fetch Driver',error });
   }
 };
+
+export const simplePlugTruckTodriver=async (req:Request,res:Response):Promise<Response>=>{
+  try {
+    const driverId=req.body.driverId;
+    const truckId=req.body.truckId;
+    if(!driverId||!truckId)return res.status(400).json({message:"driver id and truckId are required for this request!!"});
+    const foundDriver=await prisma.driver.findFirst({where:{id:driverId}});
+    if(!foundDriver)return res.status(400).json({message:"there is no driver with such id"});
+    const truck=await prisma.vehicle.findFirst({where:{id:truckId}});
+    if(!truck)return res.status(400).json({message:"there si no truck with such Id"})
+
+    if(truck.assignedParcId&&truck.assignedParcId!==foundDriver.assignedParcId)return res.status(400).json({message:"driver and truck are not in the same parc"});
+    
+    if(truck.status!=="OPERATIONAL")return res.status(400).json({message:"truck is not avaliable for this request"});
+    //detache truck from driver;
+    const attachedDriver=await prisma.driver.findFirst({where:{assignedVehicleId:truck.id}});
+    if(attachedDriver&&attachedDriver.id){
+      return res.status(400).json({message:"truck is not avaliable for this request"})
+    }
+    const updateFoundDriver=await prisma.driver.update({where:{id:driverId},data:{assignedVehicleId:truckId}})
+    if(updateFoundDriver)return res.status(200).json({message:"truck plugged successufly",data:updateFoundDriver})
+    return res.status(400).json({message: 'Failed to fetch Driver'})
+  } catch (error) {
+        console.error(error);
+ return   res.status(500).json({ message: 'Failed to fetch Driver',error });
+  }
+}
+
+export const forcePlugTruckTodriver=async (req:Request,res:Response):Promise<Response>=>{
+  try {
+    let msg="";
+    const driverId=req.body.driverId;
+    const truckId=req.body.truckId;
+    if(!driverId||!truckId)return res.status(400).json({message:"driver id and truckId are required for this request!!"});
+    const foundDriver=await prisma.driver.findFirst({where:{id:driverId}});
+    if(!foundDriver)return res.status(400).json({message:"there is no driver with such id"});
+    const truck=await prisma.vehicle.findFirst({where:{id:truckId}});
+    if(!truck)return res.status(400).json({message:"there si no truck with such Id"})
+
+    if(truck.assignedParcId&&truck.assignedParcId!==foundDriver.assignedParcId){
+      await prisma.vehicle.update({where:{id:truckId},data:{assignedParcId:foundDriver.assignedParcId}})
+      msg+=`, vehicle's parc of ${truck.plateNumber} has been Modified to driver Parc !!!`
+      if(truck.attachedTrailerId) {
+await prisma.trailer.update({where:{id:truck.attachedTrailerId},data:{assignedParcId:foundDriver.assignedParcId}})
+        msg+=`, trailer's parc of ${truck.attachedTrailerId} has been Modified to driver Parc !!!`
+      }
+    }
+    
+    if(truck.status!=="OPERATIONAL"){
+      await prisma.vehicle.update({where:{id:truck.id},data:{status:"OPERATIONAL"}})
+      msg+=`, vehicle (${truck.plateNumber}) status has been changed to OPERATIONAL`
+    }
+    //detache truck from driver;
+    const attachedDriver=await prisma.driver.findFirst({where:{assignedVehicleId:truck.id}});
+    if(attachedDriver&&attachedDriver.id){
+     await prisma.driver.update({where:{id:attachedDriver.id},data:{assignedVehicleId:null}})
+    }
+    const updateFoundDriver=await prisma.driver.update({where:{id:driverId},data:{assignedVehicleId:truckId}})
+    if(updateFoundDriver)return res.status(200).json({message:`truck plugged successufly, ${msg}`,data:updateFoundDriver})
+    return res.status(400).json({message: 'Failed to fetch Driver'})
+  } catch (error) {
+        console.error(error);
+ return   res.status(500).json({ message: 'Failed to fetch Driver',error });
+  }
+}

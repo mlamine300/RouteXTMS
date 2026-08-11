@@ -61,3 +61,35 @@ export const addDriverAction:(driver:DriverForm)=>Promise<Driver|null>=async (dr
        toast.error(`erreur impossible d'ajouter le chaffeur;\n ${error.response.data.message}`)
     }
 }
+
+export const simplePlugDriverToTruckAction:(driverId:string,truckId:string)=>Promise<void>=async(driverId,truckId)=>{
+    try {
+        const res=await axiosClient.post(API_PATHS.DRIVER.SIMPLE_PLUG_TRUCK,{driverId,truckId});
+        if(res.status===200){
+            toast.success("Tracteur a été attaché au chaufeur avec success!!!");
+           return;
+        }
+        toast.error(res.data.message)
+        
+    } catch (error:any) {
+        console.log(error)
+        if(error.response)toast.error(error.response)
+        
+    }
+}
+
+export const forcePlugDriverToTruckAction:(driverId:string,truckId:string)=>Promise<void>=async(driverId,truckId)=>{
+    try {
+        const res=await axiosClient.post(API_PATHS.DRIVER.FORCE_PLUG_TRUCK,{driverId,truckId});
+        if(res.status===200){
+            toast.success("Tracteur a été attaché au chaufeur avec success!!!");
+           return;
+        }
+        toast.error(res.data.message)
+        
+    } catch (error:any) {
+        console.log(error)
+        if(error.response)toast.error(error.response)
+        
+    }
+}

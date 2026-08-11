@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { Driver, Vehicle } from '../../types'
+import type{ Driver, Vehicle } from '../../types'
 import Input from '../ui/Input'
 import {searchTrucksAction} from "../../actions/truckAction"
-
-const PlugTruckToDriver = ({driver}:{driver:Driver|null}) => {
+import PlugTruckToDriverRow from "./PlugTruckToDriverRow"
+import PlugTruckToDriverHeader from "./PlugTruckToDriverHeader"
+const PlugTruckToDriver = ({driver}:{driver:Driver}) => {
    if(driver) console.log(driver.firstName)
     const [search, setSearch] = useState("");
   const [trucks, setTrucks] = useState<Vehicle[] >([]);
@@ -26,8 +27,9 @@ const PlugTruckToDriver = ({driver}:{driver:Driver|null}) => {
                lg:flex text-nowrap' type='text' placeHolder='par matricul, vin model chauffeur..' 
                value={search} onChange={(e) => setSearch(e.target.value)} />  
     </div>
-    <div className='flex flex-col w-full overflow-y-auto'>
-      {trucks.map(t=> <h3>{t.plateNumber} </h3>)}
+    <div className='flex flex-col w-full overflow-y-auto gap-2 pt-8'>
+      <PlugTruckToDriverHeader />
+      {trucks.map(t=> <PlugTruckToDriverRow truck={t} driver={driver} /> )}
     </div>
     </div>
   )

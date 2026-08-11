@@ -8,7 +8,7 @@ import FilterTableDiv from "../../../components/driver/FilterTableDiv"
 import EditDriverSheetContent from "../../../components/driver/EditDriverSheetContent"
 import { useEffect, useMemo, useState } from "react";
 import TablePagination from "../../../components/ui/TablePagination"
-import Button from "../../../components/ui/Button";
+import Button from "../../../components/ui/button";
 import { Plus } from "lucide-react";
 import Modal from "../../../components/ui/Modal"
 import {searchDriversAction} from "../../../actions/driverActions"
@@ -104,7 +104,7 @@ useEffect(()=>{
         </section>
         {driverToEdit&&<EditDriverSheetContent driver={driverToEdit}/>}
         <Modal className="min-w-8/12 min-h-10/12 overflow-y-auto " title="Ajouter un Chauffeur" showModal={modalType!==null} close={()=>setModalType(null)}  >
-          {modalType==="add"?<AddDriverForm form={addDriverForm} />: <PlugTruckToDriver driver={driverToEdit}/> }
+          {modalType==="add"?<AddDriverForm form={addDriverForm} />: driverToEdit? <PlugTruckToDriver driver={driverToEdit}/> : <p>...</p> }
         </Modal>
        </Sheet>
     </main>
