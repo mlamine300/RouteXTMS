@@ -18,6 +18,20 @@ try {
 }
 }
 
+export const getAllParcsAction:()=>Promise<Parc[]|null>=async()=>{
+    try {
+        const res=await axiosClient.get(API_PATHS.PARC.GET_ALL_PARC);
+        if(res.status===200)return res.data.data as Parc[];
+        return null;
+    } catch (error:any) {
+        if(error.response)
+     toast.error(error.response)
+    console.log(error)
+    return null;
+
+    }
+}
+
 export const editParcAction:(id:string,params:{name?:string;positionLat?:number;positionLng?:number})=>Promise<Parc|null>=async(id,params)=>{
 try {
     const res=await axiosClient.post(API_PATHS.PARC.UPDATE_PARC(id),params);

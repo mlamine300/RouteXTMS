@@ -41,7 +41,7 @@ export const columns:({setdriverToEdit,setModalType}:{setdriverToEdit:any,setMod
   
     
     cell:({row})=>{
-    const parc=row.original.attachedParc;
+    const parc=row.original.assignedParc;
     
   //${vehicle.plateNumber}
       return <div  className="flex justify-between hover:bg-primary/10 px-2 py-1 rounded active:bg-primary/30">

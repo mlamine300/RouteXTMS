@@ -63,7 +63,7 @@ export type Driver = {
   updatedAt: Date | null
   assignedVehicleId: string | null
   assignedVehicle:Vehicle|null
-  attachedParc:Parc |null
+  assignedParc:Parc |null
 }
 export type Parc={
   id:string|null;

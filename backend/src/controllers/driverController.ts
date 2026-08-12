@@ -20,7 +20,7 @@ export const createDriver = async (req: Request, res: Response): Promise<Respons
 duplicateFields.push({email:fEmail})
     }
     
-    if(assignedParcId||!fFirstName||!fLastName||!fPhone||!fLicenceNumbre)return res.status(400).json({message:"parc, firsName, LastName, phone and Licence Number is needed to create a driver"})
+    if(!assignedParcId||!fFirstName||!fLastName||!fPhone||!fLicenceNumbre)return res.status(400).json({message:"parc, firsName, LastName, phone and Licence Number is needed to create a driver"})
    const foundDriver=await prisma.driver.findFirst({where:{OR:duplicateFields}});
 if(foundDriver&&foundDriver.id)return res.status(400).json({message:"a driver with phone | licence | email number already exist"})
 

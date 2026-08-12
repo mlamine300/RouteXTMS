@@ -1,21 +1,29 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 //import { useEffect } from "react";
-import { DRIVER_STATUS, DriverForm,   LICENSE_CATEGORY } from "../../types";
+import { DRIVER_STATUS, type DriverForm,   LICENSE_CATEGORY, type Parc } from "../../types";
 
 import { Form } from "../ui/form";
 import MyFormField from "../ui/MyFormField";
 
-import Button from "../ui/Button";
-import { UseFormReturn } from "react-hook-form";
+import Button from "../ui/button";
+
 
 import { addDriverAction } from "../../actions/driverActions";
-import { driverDefaultValues } from "../../types/zod";
+import { driverDefaultValues, driverSchema } from "../../types/zod";
 import { BrushCleaning } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 
-const AddDriverForm = ({form}:{form:UseFormReturn<DriverForm>}) => {
 
+const AddDriverForm = ({defaultValues,parcs}:{defaultValues:any,parcs:Parc[]}) => {
 
+const form=useForm<DriverForm>({
+    resolver: zodResolver(driverSchema as any) ,
+
+    defaultValues: defaultValues,
+    
+});
 console.log(form.getValues())
   const onSubmit = async(data: DriverForm) => {
    console.log(data)
@@ -45,6 +53,26 @@ console.log(form.getValues())
     </div>
       <div className="grid grid-cols-2 gap-2">
 
+      <MyFormField
+          control={form.control}
+          isRequired
+          type='select-filter'
+          label="Parc"
+          name="parc"
+          placeholder="Parc N°1"
+          value={parcs.find(p=>p.id===form.watch("assignedParcId"))?.name||""}
+         
+          possibleValues={parcs.map(p=>p.name||"")||[]}
+          onChange={(parc: string) => {
+            if(!parcs)return;
+             const selectedParc=parcs.find(p=>p.name===parc);
+            if(selectedParc)
+            form.setValue("assignedParcId", selectedParc?.id||parcs.at(0)?.id)
+          
+
+
+          }}
+        />
         <MyFormField
           control={form.control}
           isRequired

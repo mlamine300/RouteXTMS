@@ -2,18 +2,18 @@
 
 import { SheetClose, SheetContent, SheetHeader, SheetTitle } from '../ui/sheet';
 
-import{ DRIVER_STATUS, LICENSE_CATEGORY, type Driver, type DriverForm} from "../../types"
+import{ DRIVER_STATUS, LICENSE_CATEGORY, type Driver, type DriverForm, type Parc} from "../../types"
 import { useEffect, useRef } from 'react';
 import {  driverSchema } from '../../types/zod';
  import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form} from "../ui/form";
 import MyFormField from "../../components/ui/MyFormField"
-import Button from '../ui/Button';
+import Button from '../ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../ui/accordion';
 import { editDriverAction } from '../../actions/driverActions';
 
-const EditDriverSheetContent = ({driver}:{driver:Driver}) => {
+const EditDriverSheetContent = ({driver,parcs}:{driver:Driver,parcs:Parc[]}) => {
 
     const myForm = useForm<DriverForm>({
     resolver: zodResolver(driverSchema) as any,
@@ -51,6 +51,27 @@ useEffect(() => {
     >
       <div className="grid grid-cols-2 gap-2">
        
+          <MyFormField
+         className='overflow-hidden'
+          control={myForm.control}
+          isRequired
+          type='select-filter'
+          label="Parc"
+          name="parc"
+          placeholder="Parc N°1"
+          value={parcs.find(p=>p.id===myForm.watch("assignedParcId"))?.name||""}
+
+          possibleValues={parcs.map(p=>p.name||"")||[]}
+          onChange={(parc: string) => {
+            if(!parcs)return;
+             const selectedParc=parcs.find(p=>p.name===parc);
+            if(selectedParc)
+            myForm.setValue("assignedParcId", selectedParc?.id||parcs.at(0)?.id)
+          
+
+
+          }}
+        />
 
         <MyFormField
           control={myForm.control}

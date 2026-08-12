@@ -2,7 +2,7 @@
 
 import {DataTable} from "../../../components/ui/data-table"
 import {columns} from "../../../components/driver/columns"
-import type { Driver, DriverForm, DriverStatus, LicenseCategory } from "../../../types";
+import type { Driver, DriverStatus, LicenseCategory, Parc } from "../../../types";
 import { Sheet } from "../../../components/ui/sheet";
 import FilterTableDiv from "../../../components/driver/FilterTableDiv"
 import EditDriverSheetContent from "../../../components/driver/EditDriverSheetContent"
@@ -15,11 +15,12 @@ import {searchDriversAction} from "../../../actions/driverActions"
 import { useSearchParams } from "react-router";
 import SkeletonRow from "../../../components/ui/SkeletonRow"
 import AddDriverForm from "../../../components/driver/AddDriverForm";
-import { useForm } from "react-hook-form";
-import { driverDefaultValues, driverSchema } from "../../../types/zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+
+import { driverDefaultValues } from "../../../types/zod";
+
 import PlugTruckToDriver from "../../../components/driver/PlugTruckToDriver"
-import { parcs } from "../../../data/data";
+
+import { getAllParcsAction } from "@/actions/parcActions";
 const DRIVER_PER_PAGE=10;
 const DriversPage = () => {
     const [driverToEdit, setdriverToEdit] = useState<Driver|null>(null);
@@ -31,6 +32,7 @@ const DriversPage = () => {
   
 
    const [pending,setPending]=useState(false);
+   const [parcs, setParcs] = useState<Parc[]>([]);
   //  const [sortFunction, setsortFunction] = useState<{sortBy:string,sort:-1|1}>({sortBy:"createdAt",sort:1});
   const orderBy=searchParams.get("order_by")||"createdAt";
   const orderOrientation=searchParams.get("order_orientation")==="desc"?"desc":"asc"
@@ -46,13 +48,23 @@ const DriversPage = () => {
    
 const skip=DRIVER_PER_PAGE*(page-1)
 
-const addDriverForm=useForm<DriverForm>({
-    resolver: zodResolver(driverSchema as any) ,
+// const addDriverForm=useForm<DriverForm>({
+//     resolver: zodResolver(driverSchema as any) ,
 
-    defaultValues: driverDefaultValues,
+//     defaultValues: driverDefaultValues,
     
-});
+// });
 const [drivers, setDrivers] = useState<Driver[]>([]);
+useEffect(()=>{
+  const fetchParcs=async()=>{
+    setPending(true);
+    
+const fetchedParcs=await getAllParcsAction();
+if(fetchedParcs&&fetchedParcs.length>0)setParcs(fetchedParcs);
+setPending(false);
+  }
+  fetchParcs();
+},[])
 useEffect(()=>{
   const getDrivers=async()=>{
     setPending(true)
@@ -102,9 +114,9 @@ useEffect(()=>{
             
             <TablePagination maxPages={10} className="flex justify-end gap-2 px-2 mt-4"/>
         </section>
-        {driverToEdit&&<EditDriverSheetContent driver={driverToEdit}/>}
+        {driverToEdit&&<EditDriverSheetContent parcs={parcs} driver={driverToEdit}/>}
         <Modal className="min-w-8/12 min-h-10/12 overflow-y-auto " title="Ajouter un Chauffeur" showModal={modalType!==null} close={()=>setModalType(null)}  >
-          {modalType==="add"?<AddDriverForm form={addDriverForm} />: driverToEdit? <PlugTruckToDriver driver={driverToEdit}/> : <p>...</p> }
+          {modalType==="add"?<AddDriverForm defaultValues={driverDefaultValues} parcs={parcs} />: driverToEdit? <PlugTruckToDriver driver={driverToEdit}/> : <p>...</p> }
         </Modal>
        </Sheet>
     </main>
