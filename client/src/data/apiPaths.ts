@@ -11,6 +11,25 @@ export const API_PATHS={
         UPDATE_DRIVER:(id:string)=>`api/driver/${id}`,
         DELETE_DRIVER:(id:string)=>`api/driver/${id}`,
         GET_DRIVER_BY_ID:(id:string)=>`api/driver/${id}`,
-        SEARCH_DRIVERS:"api/driver/list/search"
+        SEARCH_DRIVERS:"api/driver/list/search",
+        SIMPLE_PLUG_TRUCK:"api/driver/plug/simple",
+        FORCE_PLUG_TRUCK:"api/driver/plug/force"
+    },
+    TRUCK:{
+        GET_ALL_TRUCK:"api/truck/list/get_trucks",
+        ADD_TRUCK:"api/truck",
+        UPDATE_TRUCK:(id:string)=>`api/truck/${id}`,
+        DELETE_TRUCK:(id:string)=>`api/truck/${id}`,
+        GET_TRUCK_BY_ID:(id:string)=>`api/truck/${id}`,
+        SEARCH_TRUCKS:"api/truck/list/search"
+    },
+    PARC:{
+        GET_ALL_PARC:"api/parc",
+        ADD_PARC:"api/parc",
+        UPDATE_PARC:(id:string)=>`api/parc/${id}`,
+        DELETE_PARC:(id:string)=>`api/parc/delete/${id}`,
+        GET_PARC_BY_ID:(id:string)=>`api/parc/${id}`,
+        SEARCH_PARC:"api/parc/list/search"
+
     }
 }

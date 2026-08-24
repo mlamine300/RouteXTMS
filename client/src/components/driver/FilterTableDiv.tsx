@@ -1,20 +1,22 @@
 /* eslint-disable react-hooks/set-state-in-effect */
-import { cn } from '@/lib/utils';
+import { cn } from '../../lib/utils';
 import { useState, useEffect } from 'react';
 
 import Input from '../ui/Input';
 import { useLocation, useSearchParams } from 'react-router';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+
 
 import { AccordionContent, Accordion, AccordionItem, AccordionTrigger } from '../ui/accordion';
 
 import { FaFileExcel } from 'react-icons/fa6';
-import { DRIVER_STATUS, LICENSE_CATEGORY, type DriverStatus, type LicenseCategory } from '@/types';
+import { DRIVER_STATUS, LICENSE_CATEGORY, type DriverStatus, type LicenseCategory } from '../../types';
+import { Parc } from '../../types';
+import MySelect from '../ui/MySelect';
 
  
 //import { DropdownMenuRadio } from '../main/DropDownMenuRadio';
 
-const FilterTableDiv = ({ className }: { className?: string }) => {
+const FilterTableDiv = ({ className,parcs }: { className?: string,parcs:Parc[] }) => {
   const { pathname } = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   // 1. Initialize state directly from URL parameters
@@ -24,8 +26,9 @@ const [pending,setPending]=useState(false)
   const [LicenseCategory, setLicenseCategory] = useState<LicenseCategory|"">("C");
 const [city, setCity] = useState("");
 const [distanceFromCity, setdistanceFromCity] = useState(-1);
-
-  // 2. Single effect to sync State -> URL Params (Debounced)
+const [assignedParcId, setAssignedParcId] = useState<string>(searchParams.get("parc_id") || "");
+  
+  const assignedParc=(assignedParcId&&assignedParcId.length>0)? parcs.filter(p=>p.id===assignedParcId).at(0):null;
   useEffect(() => {
     const handler = setTimeout(() => {
       const params = new URLSearchParams(searchParams);
@@ -35,7 +38,8 @@ const [distanceFromCity, setdistanceFromCity] = useState(-1);
         else params.delete(key);
       };
      
-      updateParam("search", search);
+      updateParam("parc_id", assignedParcId);
+       updateParam("search", search);
       updateParam("status",status);
        updateParam("licence_category",LicenseCategory);
         updateParam("city",city);
@@ -49,11 +53,12 @@ const [distanceFromCity, setdistanceFromCity] = useState(-1);
 
     return () => clearTimeout(handler);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search,status,LicenseCategory,city,distanceFromCity]);
+  }, [search,status,LicenseCategory,city,distanceFromCity,assignedParcId]);
 // Sync URL Params -> State (Handles browser Back/Forward or external URL changes)
   useEffect(() => {
    
     const pSearch = searchParams.get("search") || "";
+    const pAssignedParcId=searchParams.get("parc_id")||""
      const pStatus :DriverStatus = searchParams.get("status") as DriverStatus || "" ;
       const pLicenceCategory : LicenseCategory = searchParams.get("licence_category") as LicenseCategory || "";
        const pCity = searchParams.get("city") || "";
@@ -68,8 +73,9 @@ const [distanceFromCity, setdistanceFromCity] = useState(-1);
 
     // The safe way: Only update state if the URL value is actually different!
     setSearch(prev => prev !== pSearch ? pSearch : prev);
-    setStatus(prev => prev !== pStatus ? pStatus : prev);
-    setLicenseCategory(prev => prev !== pLicenceCategory ? pLicenceCategory : prev);
+    setAssignedParcId(prev => prev !== pAssignedParcId ? pAssignedParcId : prev);
+    setStatus((prev:string) => prev !== pStatus ? pStatus : prev);
+    setLicenseCategory((prev:string) => prev !== pLicenceCategory ? pLicenceCategory : prev);
     setCity(prev => prev !== pCity ? pCity : prev);
     setdistanceFromCity(prev => prev !== pDistanceFromCity ? pDistanceFromCity : prev);
       
@@ -80,7 +86,7 @@ const [distanceFromCity, setdistanceFromCity] = useState(-1);
   }, [pathname]);
   // Handle Reset cleanly
   const handleReset = () => {
-   
+    setAssignedParcId("");
     setSearch("");
     setStatus("");
     setLicenseCategory("");
@@ -112,45 +118,21 @@ const [distanceFromCity, setdistanceFromCity] = useState(-1);
           <div className='flex flex-col gap-0 justify-around my-2'>
             <div className={cn("flex flex-col gap-1 md:grid md:grid-cols-3 lg:grid-cols-4 w-full md:min-h-24 md:gap-2", className)}>
               
-             
-
-              <div className="flex flex-col items-start gap-0">
+             <div className="flex flex-col items-start gap-0">
+                <label className='w-full flex text-xs italic'>Parc</label>
+              <MySelect label='Parc' name='assignedParcId' possibleValues={parcs.map(p=>p.name||"")} value={assignedParc?.name??""} onChange={(s:string)=>setAssignedParcId(parcs.filter(p=>p.name===s).at(0)?.id||"")} />
+               </div>
+               <div className="flex flex-col items-start gap-0">
                 <label className='w-full flex text-xs italic'>Status</label>
-                <Select value={status} onValueChange={(v:string)=>setStatus((v as DriverStatus)||"")}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Status" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-background-base">
-                    <p className='text-sm hover:cursor-pointer p-2' onClick={() => setStatus("")}>
-                      Status
-                    </p>
-                    {DRIVER_STATUS?.map((val) => (
-                      <SelectItem className="cursor-pointer hover:bg-gray-hot" key={val} value={val}>
-                        {val}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="flex flex-col items-start gap-0">
+              <MySelect label='Status' name='' onChange={(v:string)=>setStatus((v as DriverStatus)||"")} possibleValues={[...DRIVER_STATUS]} value={status} />
+             </div>
+             
+             <div className="flex flex-col items-start gap-0">
                 <label className='w-full flex text-xs italic'>Catégory de Permit</label>
-                <Select value={LicenseCategory} onValueChange={(value)=>setLicenseCategory((value as LicenseCategory)||"")}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Catégory" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-background-base">
-                    <p className='text-sm hover:cursor-pointer p-2' onClick={() => setLicenseCategory("")}>
-                      Catégory
-                    </p>
-                    {LICENSE_CATEGORY?.map((val) => (
-                      <SelectItem className="cursor-pointer hover:bg-gray-hot" key={val} value={val}>
-                        {val}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+              <MySelect label='Catégory' name='' onChange={(value:string)=>setLicenseCategory((value as LicenseCategory)||"")} possibleValues={[...LICENSE_CATEGORY]} value={LicenseCategory} />
+             </div>
+
+              
 
             
                  <Input parentClassName='flex flex-col items-start gap-0 '

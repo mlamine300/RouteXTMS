@@ -5,17 +5,17 @@ import {
   deleteVehicle,
   getVehicles,
   getVehicleById,
-  searchTrucks
+  searchVehicle
 } from '../controllers/vehicleController.js';
 
 const vehicleRoute = Router();
 
 // CRUD routes for Vehicles
 vehicleRoute.post('/', createVehicle);
-vehicleRoute.put('/:id', updateVehicle);
+vehicleRoute.post('/:id', updateVehicle);
 vehicleRoute.delete('/:id', deleteVehicle);
 vehicleRoute.post('/list/get_trucks', getVehicles);
-vehicleRoute.post('/list/search', searchTrucks);
+vehicleRoute.post('/list/search', searchVehicle);
 vehicleRoute.get('/:id', getVehicleById);
 
 export default vehicleRoute;

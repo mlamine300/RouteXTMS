@@ -19,6 +19,7 @@ import { SeedUser } from "./controllers/userController.js";
 import driverRouter from "./routes/driverRoute.js";
 import vehicleRoute from "./routes/vehicleRoute.js";
 import { prisma } from "./config/database/prisma.js";
+import parcRouter from "./routes/parcRoute.js";
 
 
 
@@ -61,6 +62,7 @@ app.use("/api/user",protect,checkAdmin,userRouter);
 app.use("/api",authRouter)
 app.use("/api/driver"/*,protect,checkAdmin*/,driverRouter);
 app.use("/api/truck"/*,protect,checkAdmin*/,vehicleRoute);
+app.use("/api/parc"/*,protect,checkAdmin*/,parcRouter);
 
 // Sanitize PORT: remove any non-digit characters and parse to integer
 const rawPort = String(process.env.PORT ?? "").trim();

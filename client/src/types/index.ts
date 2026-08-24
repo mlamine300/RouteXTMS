@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import type z from "zod";
+import type{driverSchema, parcSchema, vehicleSchema} from "./zod"
 export interface User{
      id: string;
      token:string;
@@ -39,6 +41,7 @@ export interface MenuItemType{
 
 export type Driver = {
   id: string ;
+  assignedParcId:string|null;
   userId: string ;
   firstName: string ;
   lastName: string ;
@@ -60,10 +63,21 @@ export type Driver = {
   updatedAt: Date | null
   assignedVehicleId: string | null
   assignedVehicle:Vehicle|null
+  assignedParc:Parc |null
 }
-
+export type Parc={
+  id:string|null;
+  name:string|null;
+  positionLat:number | null;
+  positionLng:number | null;
+  drivers?:Driver[]|null;
+  trailers?:Trailer[]|null;
+  vehicles?:Vehicle[]|null;
+  deletedAt?:Date|null;
+}
 export type Vehicle = {
   id: string | null
+   assignedParcId:string|null;
   fleetNumber: string | null
   plateNumber: string | null
   vin: string | null
@@ -95,11 +109,14 @@ export type Vehicle = {
   updatedAt: Date | null
   assignedDriverId: string | null
   attachedTrailerId: string | null
+  attachedParcId: string | null
    assignedDriver:Driver |null
    attachedTrailer:Trailer |null
+   assignedParc:Parc |null
 }
 export type Trailer={
     id: string 
+     assignedParcId:string|null;
   fleetNumber: string 
   plateNumber: string 
   vin: string 
@@ -135,6 +152,7 @@ export type Trailer={
 
 
 
+
 export const DRIVER_STATUS=["AVAILABLE" , "ON_TRIP" , "ON_BREAK" , "OFF_DUTY" , "INACTIVE"] as const;
 export type DriverStatus=typeof DRIVER_STATUS[number]
 
@@ -150,3 +168,10 @@ export const TRAILER_TYPE=["CONTAINER_CHASSIS" , "CURTAINSIDER" , "BOX_TRAILER" 
 export type TrailerType = typeof TRAILER_TYPE[number];
 export const TRAILER_STATUS =["AVAILABLE" , "IN_MAINTENANCE" , "OUT_OF_SERVICE" , "ATTACHED"]as const
 export type  TrailerStatus = typeof TRAILER_STATUS[number];
+
+
+
+
+export type VehicleForm = z.infer<typeof vehicleSchema>;
+export type DriverForm = z.infer<typeof driverSchema>;
+export  type parcFormType=z.infer<typeof parcSchema>;
