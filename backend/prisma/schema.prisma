@@ -167,6 +167,7 @@ model Parc {
   name String @unique
   positionLat Float @map("position_lat")
   positionLng Float @map("position_lng")
+  isActive  Boolean  @default(true) @map("is_active")
   drivers     Driver[]
   vehicles    Vehicle[]
   trailers  Trailer[]

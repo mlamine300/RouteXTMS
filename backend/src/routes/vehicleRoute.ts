@@ -8,14 +8,14 @@ import {
   searchVehicle
 } from '../controllers/vehicleController.js';
 
-const vehicleRoute = Router();
+const vehicleRouter = Router();
 
 // CRUD routes for Vehicles
-vehicleRoute.post('/', createVehicle);
-vehicleRoute.post('/:id', updateVehicle);
-vehicleRoute.delete('/:id', deleteVehicle);
-vehicleRoute.post('/list/get_trucks', getVehicles);
-vehicleRoute.post('/list/search', searchVehicle);
-vehicleRoute.get('/:id', getVehicleById);
+vehicleRouter.post('/', createVehicle);
+vehicleRouter.post('/:id', updateVehicle);
+vehicleRouter.delete('/:id', deleteVehicle);
+vehicleRouter.post('/list/get_trucks', getVehicles);
+vehicleRouter.post('/list/search', searchVehicle);
+vehicleRouter.get('/:id', getVehicleById);
 
-export default vehicleRoute;
+export default vehicleRouter;

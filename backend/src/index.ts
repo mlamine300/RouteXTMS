@@ -15,11 +15,12 @@ import { createServer } from "http";
 import userRouter from "./routes/userRoute.js";
 import authRouter from "./routes/authRoute.js";
 import { checkAdmin, protect } from "./middlewares/authMiddleware.js";
-import { SeedUser } from "./controllers/userController.js";
+
 import driverRouter from "./routes/driverRoute.js";
-import vehicleRoute from "./routes/vehicleRoute.js";
-import { prisma } from "./config/database/prisma.js";
+
 import parcRouter from "./routes/parcRoute.js";
+import traillerRouter from "./routes/trailerRoute.js";
+import vehicleRouter from "./routes/vehicleRoute.js";
 
 
 
@@ -61,8 +62,9 @@ app.use(
 app.use("/api/user",protect,checkAdmin,userRouter);
 app.use("/api",authRouter)
 app.use("/api/driver"/*,protect,checkAdmin*/,driverRouter);
-app.use("/api/truck"/*,protect,checkAdmin*/,vehicleRoute);
+app.use("/api/truck"/*,protect,checkAdmin*/,vehicleRouter);
 app.use("/api/parc"/*,protect,checkAdmin*/,parcRouter);
+app.use("/api/trailer"/*,protect,checkAdmin*/,traillerRouter);
 
 // Sanitize PORT: remove any non-digit characters and parse to integer
 const rawPort = String(process.env.PORT ?? "").trim();

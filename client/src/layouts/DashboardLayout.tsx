@@ -14,7 +14,7 @@ const DashboardLayout = ({ children }: { children: any }) => {
       
       <SideBar  />
 
-      <main  className=" my-24 w-full px-5   flex  h-full container justify-center ">{children}</main>
+      <main  className=" my-16 w-full px-5  flex  h-full container justify-center ">{children}</main>
    
     </section>
   );

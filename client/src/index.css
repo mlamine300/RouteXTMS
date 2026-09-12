@@ -462,7 +462,7 @@
   }
 }
 .container{
-  @apply min-2xl:max-w-7xl min-h-screen h-fit bg-background-base 
+  @apply max-2xl:max-w-7xl min-h-screen h-fit bg-background-base 
 }
 .page-layout{
   @apply w-full h-full p-[3%]  flex flex-col items-start bg-background shadow-2xl min-h-[90svh] 

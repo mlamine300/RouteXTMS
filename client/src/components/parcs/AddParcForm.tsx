@@ -6,7 +6,7 @@ import { parcSchema } from '../../types/zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form} from "../ui/form";
 import MyFormField from "../ui/MyFormField"
-import Button from '../ui/button';
+import Button from '../ui/Button';
 import toast from 'react-hot-toast'
 import {addParcAction} from "../../actions/parcActions"
 const AddParcForm = () => {

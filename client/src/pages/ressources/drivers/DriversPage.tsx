@@ -8,7 +8,7 @@ import FilterTableDiv from "../../../components/driver/FilterTableDiv"
 import EditDriverSheetContent from "../../../components/driver/EditDriverSheetContent"
 import { useEffect, useMemo, useState } from "react";
 import TablePagination from "../../../components/ui/TablePagination"
-import Button from "../../../components/ui/button";
+import Button from "../../../components/ui/Button";
 import { Plus } from "lucide-react";
 import Modal from "../../../components/ui/Modal"
 import {searchDriversAction} from "../../../actions/driverActions"
@@ -20,7 +20,7 @@ import { driverDefaultValues } from "../../../types/zod";
 
 import PlugTruckToDriver from "../../../components/driver/PlugTruckToDriver"
 
-import { getAllParcsAction } from "@/actions/parcActions";
+import { getAllParcsAction } from "../../../actions/parcActions";
 const DRIVER_PER_PAGE=10;
 const DriversPage = () => {
     const [driverToEdit, setdriverToEdit] = useState<Driver|null>(null);
