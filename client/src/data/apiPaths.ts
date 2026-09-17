@@ -31,5 +31,14 @@ export const API_PATHS={
         GET_PARC_BY_ID:(id:string)=>`api/parc/${id}`,
         SEARCH_PARC:"api/parc/list/search"
 
+    },
+     TRAILER:{
+        GET_ALL_TRAILER:"api/trailer/list/get_trailers",
+        ADD_TRAILER:"api/trailer",
+        UPDATE_TRAILER:(id:string)=>`api/trailer/${id}`,
+        DELETE_TRAILER:(id:string)=>`api/trailer/${id}`,
+        GET_TRAILER_BY_ID:(id:string)=>`api/trailer/${id}`,
+        SEARCH_TRAILER:"api/trailer/list/search"
+
     }
 }

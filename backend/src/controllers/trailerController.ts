@@ -132,7 +132,16 @@ export const searchTrailers=async (req:Request,res:Response):Promise<Response>=>
  if(isDoubleDeck)filter.push({isDoubleDeck});
  if(isRefrigerated)filter.push({isRefrigerated});
  
- const trailers=await prisma.trailer.findMany({take:limit,skip,where:{AND:filter},orderBy:{[orderBy]:orderOrientation}})
+ const trailers=await prisma.trailer.findMany({take:limit,skip,where:{AND:filter},orderBy:{[orderBy]:orderOrientation},include: {
+   
+    
+   
+  assignedParc: {
+    select: {
+      name: true,
+
+    }}
+  }})
   
 
  return res.status(200).json({message:"success",data:trailers})

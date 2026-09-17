@@ -8,6 +8,7 @@ import NotFound from './components/main/NotFound'
 import DriversPage from "./pages/ressources/drivers/DriversPage"
 import TrucksPage from "./pages/ressources/trucks/TrucksPage"
 import ParcsPage from "./pages/ressources/parcs/ParcsPage"
+import TrailersPage from './pages/ressources/trailers/TrailersPage'
 function App() {
   
 
@@ -23,6 +24,7 @@ function App() {
            <Route path="/drivers" element={<DriversPage />} />
            <Route path="/trucks" element={<TrucksPage />} />
            <Route path="/parcs" element={<ParcsPage />} />
+           <Route path="/trailers" element={<TrailersPage />} />
        </Route>
        <Route path="*" element={<NotFound />} />
 

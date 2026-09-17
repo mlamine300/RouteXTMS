@@ -148,6 +148,7 @@ export type Trailer={
   createdAt: Date | null
   updatedAt: Date | null
   currentTractorId: string | null
+   assignedParc:Parc |null
 } 
 
 
