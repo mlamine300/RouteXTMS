@@ -1,5 +1,5 @@
 import { z } from "zod";
-import {  DRIVER_STATUS, FUEL_TYPE, LICENSE_CATEGORY, VEHICLE_TECHNICAL_STATUS, VEHICLE_TYPE, type DriverForm} from "./index"
+import {  DRIVER_STATUS, FUEL_TYPE, LICENSE_CATEGORY, TrailerForm, VEHICLE_TECHNICAL_STATUS, VEHICLE_TYPE, type DriverForm} from "./index"
 export const vehicleSchema = z.object({
   assignedParcId:z
     .string()
@@ -188,3 +188,241 @@ export const driverDefaultValues: DriverForm = {
   assignedVehicleId: null,
   userId: null,
 };
+
+
+
+// --- TYPES DE REMORQUE ---
+export const trailerTypeEnum = z.enum([
+  "CURTAINSIDER",
+  "REFRIGERATED",
+  "FLATBED",
+  "BOX",
+  "TANKER",
+  "LOW_LOADER",
+]);
+
+// --- STATUTS DE REMORQUE ---
+export const trailerStatusEnum = z.enum([
+  "AVAILABLE",
+  "IN_USE",
+  "MAINTENANCE",
+  "OUT_OF_SERVICE",
+]);
+
+export const trailerFormSchema = z
+  .object({
+    // --- INFORMATIONS GÉNÉRALES ---
+    fleetNumber: z.string().trim().optional().or(z.literal("")),
+    plateNumber: z
+      .string()
+      .trim()
+      .min(1, "Le numéro d'immatriculation est obligatoire"),
+
+    vin: z.string().trim().optional().or(z.literal("")),
+
+    make: z
+      .string()
+      .trim()
+      .min(1, "La marque de la remorque est obligatoire"),
+
+    model: z.string().trim().optional().or(z.literal("")),
+
+    year: z.coerce
+      .number()
+      .int("L'année doit être un nombre entier")
+      .min(1900, "L'année doit être supérieure ou égale à 1900")
+      .max(
+        new Date().getFullYear() + 1,
+        "L'année ne peut pas être supérieure à l'année prochaine",
+      ),
+
+    type: trailerTypeEnum.default("CURTAINSIDER"),
+    status: trailerStatusEnum.default("AVAILABLE"),
+
+    // --- CAPACITÉ ET DIMENSIONS ---
+    maxPayloadKg: z.coerce
+      .number()
+      .positive("La charge utile maximale doit être supérieure à 0"),
+
+    maxVolumeM3: z.coerce
+      .number()
+      .positive("Le volume maximal doit être supérieur à 0"),
+
+    euroPalletCap: z.coerce
+      .number()
+      .int("La capacité en palettes doit être un nombre entier")
+      .positive("La capacité en palettes doit être supérieure à 0")
+      .default(33),
+
+    internalHeightMeters: z.coerce
+      .number()
+      .positive("La hauteur intérieure doit être supérieure à 0")
+      .optional()
+      .nullable(),
+
+    grossWeightKg: z.coerce
+      .number()
+      .positive("Le poids total autorisé doit être supérieur à 0")
+      .optional()
+      .nullable(),
+
+    // --- ÉQUIPEMENTS ET TRANSPORT SPÉCIALISÉ ---
+    isRefrigerated: z.boolean().default(false),
+
+    reeferEngineHours: z.coerce
+      .number()
+      .min(0, "Le nombre d'heures du groupe frigorifique ne peut pas être négatif")
+      .optional()
+      .nullable(),
+
+    tempMinCelsius: z.coerce
+      .number()
+      .optional()
+      .nullable(),
+
+    tempMaxCelsius: z.coerce
+      .number()
+      .optional()
+      .nullable(),
+
+    hasTailLift: z.boolean().default(false),
+    hasHazardousAdr: z.boolean().default(false),
+    isDoubleDeck: z.boolean().default(false),
+
+    // --- ASSURANCE ET CONTRÔLES RÉGLEMENTAIRES ---
+    insuranceNumber: z.string().trim().optional().or(z.literal("")),
+
+    insuranceExpiresAt: z
+      .union([z.string(), z.date()])
+      .optional()
+      .nullable()
+      .transform((value) => {
+        if (!value || value === "") return null;
+        return value instanceof Date ? value : new Date(value);
+      }),
+
+    inspectionExpiresAt: z
+      .union([z.string(), z.date()])
+      .optional()
+      .nullable()
+      .transform((value) => {
+        if (!value || value === "") return null;
+        return value instanceof Date ? value : new Date(value);
+      }),
+
+    atpExpiresAt: z
+      .union([z.string(), z.date()])
+      .optional()
+      .nullable()
+      .transform((value) => {
+        if (!value || value === "") return null;
+        return value instanceof Date ? value : new Date(value);
+      }),
+
+    // --- TÉLÉMATIQUE ET GÉOLOCALISATION ---
+    telematicsDeviceId: z.string().trim().optional().or(z.literal("")),
+
+    currentLat: z.coerce
+      .number()
+      .min(-90, "La latitude doit être supérieure ou égale à -90")
+      .max(90, "La latitude doit être inférieure ou égale à 90")
+      .optional()
+      .nullable(),
+
+    currentLng: z.coerce
+      .number()
+      .min(-180, "La longitude doit être supérieure ou égale à -180")
+      .max(180, "La longitude doit être inférieure ou égale à 180")
+      .optional()
+      .nullable(),
+
+    // --- AFFECTATION ---
+    assignedParcName: z
+      .string()
+      .min(1, "Le parc de rattachement est obligatoire"),
+  })
+
+  // Vérification de la cohérence des températures
+  .refine(
+    (data) =>
+      data.tempMinCelsius == null ||
+      data.tempMaxCelsius == null ||
+      data.tempMinCelsius <= data.tempMaxCelsius,
+    {
+      message:
+        "La température minimale ne peut pas dépasser la température maximale",
+      path: ["tempMinCelsius"],
+    },
+  )
+
+  // Les limites de température sont obligatoires pour une remorque frigorifique
+  .refine(
+    (data) =>
+      !data.isRefrigerated ||
+      (data.tempMinCelsius != null && data.tempMaxCelsius != null),
+    {
+      message:
+        "Les températures minimale et maximale sont obligatoires pour une remorque frigorifique",
+      path: ["tempMinCelsius"],
+    },
+  )
+
+  // Le nombre d'heures du groupe frigorifique est obligatoire si la remorque est frigorifique
+  .refine(
+    (data) =>
+      !data.isRefrigerated || data.reeferEngineHours != null,
+    {
+      message:
+        "Le nombre d'heures du groupe frigorifique est obligatoire pour une remorque frigorifique",
+      path: ["reeferEngineHours"],
+    },
+  );
+
+
+
+
+
+
+  export const trailerDefaultValues: TrailerForm = {
+  // --- INFORMATIONS GÉNÉRALES ---
+  fleetNumber: "",
+  plateNumber: "",
+  vin: "",
+  make: "",
+  model: "",
+  year: new Date().getFullYear(),
+  type: "CURTAINSIDER",
+  status: "AVAILABLE",
+
+  // --- CAPACITÉ ET DIMENSIONS ---
+  maxPayloadKg: 0,
+  maxVolumeM3: 0,
+  euroPalletCap: 33,
+  internalHeightMeters: null,
+  grossWeightKg: null,
+
+  // --- ÉQUIPEMENTS ET TRANSPORT SPÉCIALISÉ ---
+  isRefrigerated: false,
+  reeferEngineHours: null,
+  tempMinCelsius: null,
+  tempMaxCelsius: null,
+  hasTailLift: false,
+  hasHazardousAdr: false,
+  isDoubleDeck: false,
+
+  // --- ASSURANCE ET CONTRÔLES RÉGLEMENTAIRES ---
+  insuranceNumber: "",
+  insuranceExpiresAt: null,
+  inspectionExpiresAt: null,
+  atpExpiresAt: null,
+
+  // --- TÉLÉMATIQUE ET GÉOLOCALISATION ---
+  telematicsDeviceId: "",
+  currentLat: null,
+  currentLng: null,
+
+  // --- AFFECTATION ---
+  assignedParcName: "",
+};
+
+

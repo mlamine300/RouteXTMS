@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type z from "zod";
-import type{driverSchema, parcSchema, vehicleSchema} from "./zod"
+import type{driverSchema, parcSchema, trailerFormSchema, vehicleSchema} from "./zod"
 export interface User{
      id: string;
      token:string;
@@ -176,3 +176,6 @@ export type  TrailerStatus = typeof TRAILER_STATUS[number];
 export type VehicleForm = z.infer<typeof vehicleSchema>;
 export type DriverForm = z.infer<typeof driverSchema>;
 export  type parcFormType=z.infer<typeof parcSchema>;
+export type TrailerForm = z.input<typeof trailerFormSchema>;
+
+export type CreateTrailerInput = z.output<typeof trailerFormSchema>;

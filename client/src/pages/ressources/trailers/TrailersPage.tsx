@@ -1,17 +1,23 @@
-import FilterTableDiv from '@/components/trailers/FilterTableDiv'
-import { columns } from '@/components/trailers/columns'
-import Modal from '@/components/ui/Modal'
-import SkeletonRow from '@/components/ui/SkeletonRow'
-import TablePagination from '@/components/ui/TablePagination'
-import Button from '@/components/ui/button'
-import { DataTable } from '@/components/ui/data-table'
-import { Sheet } from '@/components/ui/sheet'
-import type{ Parc, Trailer } from '@/types'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+import { columns } from '../../../components/trailers/columns'
+import Modal from '../../../components/ui/Modal'
+import SkeletonRow from '../../../components/ui/SkeletonRow'
+import TablePagination from '../../../components/ui/TablePagination'
+import Button from '../../../components/ui/Button'
+import { DataTable } from '../../../components/ui/data-table'
+import { Sheet } from '../../../components/ui/sheet'
+import type{ Parc, Trailer, TrailerForm } from '../../../types'
 import { Plus } from 'lucide-react'
 import  { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router'
 import {searchTrailersAction} from "../../../actions/trailerAction"
-import { getAllParcsAction } from '@/actions/parcActions'
+import { getAllParcsAction } from '../../../actions/parcActions'
+import AddTrailerForm from '../../../components/trailers/AddTrailerForm'
+import FilterTableDiv from '../../../components/trailers/FilterTAbleDiv'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { trailerDefaultValues, trailerFormSchema } from '../../../types/zod'
 const TRAILER_PER_PAGE=10;
 const TrailersPage = () => {
 const [parcs, setParcs] = useState<Parc[]>([]);
@@ -46,6 +52,10 @@ const [trailers, setTrailers] = useState<Trailer[]>([]);
   getParks();
  },[searchParams])
 
+  const addTrailerForm = useForm<TrailerForm>({
+     resolver: zodResolver(trailerFormSchema),
+     defaultValues: trailerDefaultValues as TrailerForm,
+  });
 
   return (
     <main className=' page-layout bg-background-base'>
@@ -55,7 +65,7 @@ const [trailers, setTrailers] = useState<Trailer[]>([]);
       <div className="w-full   min-h-40   flex flex-col items-center">
              <div className="flex justify-between  w-full">
                 <h3 className="text-3xl 2xl:text-5xl 2xl:mb-8">Gestion des Remorques</h3>
-                <Button text="Ajouter un Tracteur" variant="outline" className="h-10 2xl:h-16 px-6 py-1 flex items-center gap-2" icon={Plus} onClick={()=>setShowModal(true)} />
+                <Button text="Ajouter une Remorque" variant="outline" className="h-10 2xl:h-16 px-6 py-1 flex items-center gap-2" icon={Plus} onClick={()=>setShowModal(true)} />
              </div>
         <section className=" w-full h-full p-2   rounded-lg shadow-2xl">
             <FilterTableDiv parcs={parcs}/>
@@ -91,8 +101,8 @@ const [trailers, setTrailers] = useState<Trailer[]>([]);
         // <EditTrucksSheetContent truck={truckToEdit}/>
         }
         <Modal className="min-w-8/12 min-h-10/12 overflow-y-auto " title="Ajouter un Tracteur" showModal={showModal} close={()=>setShowModal(false)}  >
-          {/* <AddTruckForm form={addTruckForm} /> */}
-          <p>hola</p>
+         <AddTrailerForm form={addTrailerForm} parcs={parcs} />
+         
         </Modal>
        </Sheet>
     </main>
